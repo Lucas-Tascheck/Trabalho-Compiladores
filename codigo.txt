@@ -1,0 +1,9 @@
+int teste(int testando){
+    if(1 < 2){
+        return;
+    }
+}
+
+{
+    return 5+5;
+}

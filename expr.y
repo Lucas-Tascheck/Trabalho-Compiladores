@@ -19,7 +19,7 @@ int yylex();
 
 Linha : Expr TFIM { printf("Resultado: %lf\n", $1); exit(0); }
       | Rel TFIM { if ($1) printf("True\n"); else printf("False\n"); exit(0); }
-	  | Programa TFIM { printf("%lf\n", $1); exit(0); }
+	| Programa { printf("%lf\n", $1); exit(0); }
       ; 
 
 Expr  : Expr TADD Termo { $$ = $1 + $3; }
