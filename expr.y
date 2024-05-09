@@ -1,40 +1,149 @@
 %{
 #define YYSTYPE double
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 
 int yyerror(const char *);
 int yylex();
 
 %}
-%define parse.error verbose
 
-%token TADD TMUL TSUB TDIV TAPAR TFPAR TNUM TLESS TMORE TEQUAL TDIFF TFIM
+%token STRING
+%token INT FLOAT VOID
+%token IF ELSE WHILE PRINT READ RETURN
+%token SEMICOLON COMMA LBRACE RBRACE
+%token TADD TMUL TSUB TDIV EQ TAPAR TFPAR TNUM TLESS TMORE TEQUAL TDIFF TAND TOR TFIM ID
 
 %%
-Linha :Expr TFIM {printf("Resultado:%lf\n", $1);exit(0);}
-	| Rel TFIM { if ($1 != 0) printf("True"); else printf("False"); exit(0);}
-	; 
-Expr: Expr TADD Termo {$$ = $1 + $3;}
-	| Expr TSUB Termo {$$ = $1 - $3;}
-	| Termo
-	;
-Termo: Termo TMUL Fator {$$ = $1 * $3;}
-	| Termo TDIV Fator {$$ = $1 / $3;}
-	| Fator
-	;
-Fator: TNUM 
-	| TAPAR Expr TFPAR {$$ = $2;}
-	;
-Rel: TNUM TMORE TNUM {}
-	| TNUM TLESS TNUM {}
-	| TNUM TEQUAL TEQUAL TNUM {}
-	| TNUM TDIFF TEQUAL TNUM {}
+
+Linha : Expr TFIM { printf("Resultado: %lf\n", $1); exit(0); }
+      | Rel TFIM { if ($1) printf("True\n"); else printf("False\n"); exit(0); }
+	  | Programa TFIM { printf("%lf\n", $1); exit(0); }
+      ; 
+
+Expr  : Expr TADD Termo { $$ = $1 + $3; }
+      | Expr TSUB Termo { $$ = $1 - $3; }
+      | Termo
+      ;
+
+Termo : Termo TMUL Fator { $$ = $1 * $3; }
+      | Termo TDIV Fator { $$ = $1 / $3; }
+      | Fator
+      ;
+
+Fator : TNUM 
+      | TAPAR Expr TFPAR { $$ = $2; }
+      ;
+
+Rel   : Rel TAND OpLog { $$ = $1 && $3; }
+	  | Rel TOR OpLog { $$ = $1 || $3; }
+	  | OpLog
+      ;
+
+OpLog : TNUM TMORE TNUM { $$ = $1 > $3; }
+      | TNUM TLESS TNUM { $$ = $1 < $3; }
+      | TNUM TEQUAL TNUM { $$ = $1 == $3; }
+      | TNUM TDIFF TNUM { $$ = $1 != $3; }
+      ;
+Programa : ListaFuncoes BlocoPrincipal { $$ = $2; }
+         | BlocoPrincipal { $$ = $1; }
+         ;
+
+ListaFuncoes : ListaFuncoes Funcao 
+             | Funcao
+             ;
+
+Funcao : TipoRetorno ID TAPAR DeclParametros TFPAR BlocoPrincipal 
+       | TipoRetorno ID TAPAR TFPAR BlocoPrincipal
+       ;
+
+TipoRetorno : Tipo
+            | VOID
+            ;
+
+DeclParametros : DeclParametros COMMA Parametro
+               | Parametro
+               ;
+
+Parametro : Tipo ID
+          ;
+
+BlocoPrincipal : LBRACE Declaracoes ListaCmd RBRACE { $$ = $3; }
+               | LBRACE ListaCmd RBRACE { $$ = $2; }
+               ;
+
+Declaracoes : Declaracoes Declaracao
+            | Declaracao
+            ;
+
+Declaracao : Tipo ListaId SEMICOLON
+           ;
+
+Tipo : INT
+     | ID
+     | FLOAT
+     ;
+
+ListaId : ListaId COMMA ID
+        | ID
+        ;
+
+Bloco : LBRACE ListaCmd RBRACE { $$ = $2; }
+      ;
+
+ListaCmd : ListaCmd Comando { $$ = $2; }
+         | Comando { $$ = $1; }
+         ;
+
+Comando : CmdSe { $$ = $1; } 
+        | CmdEnquanto { $$ = $1; }
+        | CmdAtrib { $$ = $1; }
+        | CmdEscrita { $$ = $1; }
+        | CmdLeitura { $$ = $1; }
+        | ChamadaProc { $$ = $1; }
+        | Retorno { $$ = $1; }
+        ;
+
+Retorno : RETURN Expr SEMICOLON { $$ = $2; }
+        | RETURN ID SEMICOLON { $$ = 1; }
+        | RETURN SEMICOLON { $$ = 1; }
+        ;
+
+CmdSe : IF TAPAR Rel TFPAR Bloco { $$ = $5; }
+      | IF TAPAR Rel TFPAR Bloco ELSE Bloco { if($3) $$ = $5; else $$ = 7; }
+      ;
+
+CmdEnquanto : WHILE TAPAR Rel TFPAR Bloco
+            ;
+
+CmdAtrib : ID EQ Expr SEMICOLON
+         | ID EQ STRING SEMICOLON
+         ;
+
+CmdEscrita : PRINT TAPAR Expr TFPAR SEMICOLON
+           | PRINT TAPAR STRING TFPAR SEMICOLON
+           ;
+
+CmdLeitura : READ TAPAR ID TFPAR SEMICOLON
+           ;
+
+ChamadaProc : ChamaFuncao SEMICOLON
+            ;
+
+ChamaFuncao : ID TAPAR ListaParametros TFPAR
+            | ID TAPAR TFPAR
+            ;
+
+ListaParametros : ListaParametros COMMA Expr
+                | ListaParametros COMMA STRING
+                | Expr
+                | STRING
+                ;
 %%
 
-int yyerror (const char *str)
+int yyerror(const char *str)
 {
-	fprintf(stderr, "%s\n", str);
-	
-} 		 
-
+    fprintf(stderr, "%s\n", str);
+    return 0; // Adicione um retorno para evitar warnings
+}
