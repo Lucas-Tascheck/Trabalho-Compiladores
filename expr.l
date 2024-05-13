@@ -37,6 +37,7 @@ id	[a-zA-Z][a-zA-Z0-9]*
 "||"    {return TOR;}
 "int"   {return INT;}
 "float" {return FLOAT;}
+"string" {return STRING;}
 "void"  {return VOID;}
 "if"    {return IF;}
 "else"  {return ELSE;}

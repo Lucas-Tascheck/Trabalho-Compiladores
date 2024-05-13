@@ -82,7 +82,7 @@ Declaracao : Tipo ListaId SEMICOLON
            ;
 
 Tipo : INT
-     | ID
+     | STRING
      | FLOAT
      ;
 
@@ -119,11 +119,11 @@ CmdEnquanto : WHILE TAPAR Rel TFPAR Bloco
             ;
 
 CmdAtrib : ID EQ Expr SEMICOLON
-         | ID EQ STRING SEMICOLON
+         | ID EQ ID SEMICOLON
          ;
 
 CmdEscrita : PRINT TAPAR Expr TFPAR SEMICOLON
-           | PRINT TAPAR STRING TFPAR SEMICOLON
+           | PRINT TAPAR ID TFPAR SEMICOLON
            ;
 
 CmdLeitura : READ TAPAR ID TFPAR SEMICOLON
@@ -137,9 +137,9 @@ ChamaFuncao : ID TAPAR ListaParametros TFPAR
             ;
 
 ListaParametros : ListaParametros COMMA Expr
-                | ListaParametros COMMA STRING
+                | ListaParametros COMMA ID
                 | Expr
-                | STRING
+                | ID
                 ;
 %%
 

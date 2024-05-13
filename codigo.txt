@@ -5,7 +5,6 @@ int teste(int testando){
 }
 
 {
-    if(1){
-        return 1;
-    }
+    function(teste);
+    return 1+1;
 }
