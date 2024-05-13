@@ -1,1 +1,1 @@
-int teste(int testando){    if(1 < 2){        return;    }}{    return 5+5;}
+int teste(int testando){    if(1 < 2){        return;    }}{    if(1){        return 1;    }}

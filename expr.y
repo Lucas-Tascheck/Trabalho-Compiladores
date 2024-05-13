@@ -21,11 +21,11 @@ Linha : Expr TFIM { printf("Resultado: %lf\n", $1); exit(0); }
       | Rel TFIM { if ($1) printf("True\n"); else printf("False\n"); exit(0); }
 	| Programa { printf("%lf\n", $1); exit(0); }
       ; 
-
 Expr  : Expr TADD Termo { $$ = $1 + $3; }
       | Expr TSUB Termo { $$ = $1 - $3; }
       | Termo
       ;
+
 
 Termo : Termo TMUL Fator { $$ = $1 * $3; }
       | Termo TDIV Fator { $$ = $1 / $3; }
@@ -45,6 +45,7 @@ OpLog : TNUM TMORE TNUM { $$ = $1 > $3; }
       | TNUM TLESS TNUM { $$ = $1 < $3; }
       | TNUM TEQUAL TNUM { $$ = $1 == $3; }
       | TNUM TDIFF TNUM { $$ = $1 != $3; }
+      | TNUM { $$ = $1; }
       ;
 Programa : ListaFuncoes BlocoPrincipal { $$ = $2; }
          | BlocoPrincipal { $$ = $1; }
