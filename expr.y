@@ -51,7 +51,7 @@ int yylex();
 %type <doubleNum> TAND
 %type <doubleNum> TOR
 %type <doubleNum> TFIM
-%type <doubleNum> ID
+%type <stringVal> ID
 %type <listaDeFunc> Programa
 %type <listaDeFunc> Linha
 %type <listaDeFunc> ListaFuncoes
