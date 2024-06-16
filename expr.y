@@ -1,14 +1,18 @@
-%{
+%{ 
+#include <stdio.h>
+#include <stdlib.h>
 #include "ast.h"
-int yyerror(const char *);
-int yylex();
 
 Programa *programa;
 ListaDeFunc *listaDeFunc;
 ListaParam *listaParam;
 Declaracoes *declaracoes;
 ListaDeCmd *listaDeCmd;
+
+int yyerror(const char *);
+int yylex();
 %}
+
 
 %union {
       double doubleNum;
