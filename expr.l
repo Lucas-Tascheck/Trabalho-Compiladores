@@ -1,7 +1,6 @@
 %option noyywrap
 
 %{
-#define YYSTYPE struct ExpressionValue
 #include "ast.h"
 #include "expr.tab.h"
 
@@ -10,6 +9,11 @@ struct ExpressionValue {
     char *str_value;
 };
 %}
+
+%union {
+    double num_value;
+    char *str_value;
+}
 
 delim	[ \t\n]
 ws	{delim}+
