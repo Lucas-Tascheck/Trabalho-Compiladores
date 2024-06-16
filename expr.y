@@ -1,9 +1,15 @@
 %{
-#define YYSTYPE double
+#define YYSTYPE struct NodeTypes
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include "ast.h"
+
+struct NodeTypes {
+      double doubleNum;
+      ListaParam *listaParam;
+      ListaDeFunc *listaDeFunc;
+};
 
 int yyerror(const char *);
 int yylex();
@@ -18,7 +24,7 @@ int yylex();
 
 %%
 
-Linha : Programa {print("%s", $1->id);}
+Linha : Programa {printf("%s", $1->id);}
       ; 
 Expr  : Expr TADD Termo { $$ = $1 + $3; }
       | Expr TSUB Termo { $$ = $1 - $3; }
