@@ -52,15 +52,6 @@ int yylex();
 %type <doubleNum> TOR
 %type <doubleNum> TFIM
 %type <doubleNum> ID
-
-%}
-%union {
-      double doubleNum;
-      char *stringVal;
-      ListaParam *listaParam;
-      ListaDeFunc *listaDeFunc;
-}
-
 %type <listaDeFunc> Programa
 %type <listaDeFunc> Linha
 %type <listaDeFunc> ListaFuncoes
