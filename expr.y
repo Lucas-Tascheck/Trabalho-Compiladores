@@ -4,24 +4,6 @@
 #include <stdlib.h>
 #include "ast.h"
 
-typedef struct ListaParam ListaParam;
-typedef struct ListaDeFunc ListaDeFunc;
-
-struct ListaDeFunc {
-    char *nodeType;
-    char *tipo;
-    char *id;
-    ListaParam *listaParam;
-    ListaDeFunc *prox;
-};
-
-struct ListaParam {
-    char *tipo;
-    char *id;
-    ListaParam *prox;
-};
-
-
 int yyerror(const char *);
 int yylex();
 //Colocar BlocoPrincipal
@@ -35,6 +17,7 @@ int yylex();
       ListaParam *listaParam;
       ListaDeFunc *listaDeFunc;
 }
+
 %define parse.error verbose
 %token STRING
 %token INT FLOAT VOID
@@ -75,7 +58,6 @@ int yylex();
 %type <listaDeFunc> Funcao
 %type <listaParam> DeclParametros 
 %type <listaParam> Parametro
-%type <doubleNum> Expr
 %type <doubleNum> Termo
 %type <doubleNum> Fator
 %type <stringVal> TipoRetorno
