@@ -2,6 +2,12 @@
 #include "ast.h"
 int yyerror(const char *);
 int yylex();
+
+Programa *programa;
+ListaDeFunc *listaDeFunc;
+ListaParam *listaParam;
+Declaracoes *declaracoes;
+ListaDeCmd *listaDeCmd;
 %}
 
 %union {
