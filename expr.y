@@ -9,7 +9,7 @@
       double doubleNum;
       ListaParam *listaParam;
       ListaDeFunc *listaDeFunc;
-};
+}
 
 int yyerror(const char *);
 int yylex();
