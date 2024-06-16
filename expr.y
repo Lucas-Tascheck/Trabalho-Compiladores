@@ -64,7 +64,6 @@ int yylex();
 %type <stringVal> TipoRetorno
 %type <stringVal> Tipo
 %type <doubleNum> ChamaFuncao
-%type <listaDeFunc> BlocoPrincipal
 
 
 %%
