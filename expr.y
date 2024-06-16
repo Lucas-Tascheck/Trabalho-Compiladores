@@ -1,7 +1,4 @@
 %{
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
 #include "ast.h"
 
 Programa *programa; // Variável global para armazenar o programa principal
