@@ -57,8 +57,6 @@ int yylex();
 %type <listaDeFunc> Funcao
 %type <listaParam> DeclParametros 
 %type <listaParam> Parametro
-%type <doubleNum> Termo
-%type <doubleNum> Fator
 %type <stringVal> TipoRetorno
 %type <stringVal> Tipo
 
