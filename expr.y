@@ -62,7 +62,6 @@ int yylex();
 %type <doubleNum> Termo
 %type <doubleNum> Fator
 %type <doubleNum> Rel
-%type <doubleNum> OpLog
 %type <doubleNum> FatorLog
 %type <stringVal> TipoRetorno
 %type <stringVal> Tipo
@@ -106,16 +105,16 @@ Fator2 : ID
       | TAPAR ExprSTR TFPAR 
       ;
 
-Rel   : Rel TAND OpLog { $$ = $1 && $3; }
-	  | Rel TOR OpLog { $$ = $1 || $3; }
+Rel   : Rel TAND OpLog
+	  | Rel TOR OpLog
 	  | OpLog
       ;
 
-OpLog : FatorLog TMORE FatorLog { $$ = $1 > $3; }
-      | FatorLog TLESS FatorLog { $$ = $1 < $3; }
-      | FatorLog TEQUAL FatorLog { $$ = $1 == $3; }
-      | FatorLog TDIFF FatorLog { $$ = $1 != $3; }
-      | FatorLog { $$ = $1; }
+OpLog : FatorLog TMORE FatorLog
+      | FatorLog TLESS FatorLog
+      | FatorLog TEQUAL FatorLog
+      | FatorLog TDIFF FatorLog
+      | FatorLog
       ;
 
 FatorLog: TNUM
