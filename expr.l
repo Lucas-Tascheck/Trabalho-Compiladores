@@ -2,10 +2,8 @@
 
 %{
 #define YYSTYPE struct ExpressionValue
-#include "expr.tab.h"
 #include "ast.h"
-#include <stdlib.h>
-#include <string.h>
+#include "expr.tab.h"
 
 struct ExpressionValue {
     double num_value;
