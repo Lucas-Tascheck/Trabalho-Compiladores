@@ -4,18 +4,26 @@
 #include <stdlib.h>
 #include "ast.h"
 
+Programa *programa; // Variável global para armazenar o programa principal
+
+Programa *initPrograma();
+ListaDeFunc *initListaDeFunc(char *nodetype, char *tipo, char *id, ListaParam *lista);
+ListaParam *initParam(char *tipo, char *id);
+Programa *addListaDeFunc(ListaDeFunc *nodo);
+
 int yyerror(const char *);
 int yylex();
-//Colocar BlocoPrincipal
-//      | BlocoPrincipal
-//      em Programas
-
 %}
+
 %union {
       double doubleNum;
       char *stringVal;
-      ListaParam *listaParam;
+      Programa *programa;
       ListaDeFunc *listaDeFunc;
+      ListaParam *listaParam;
+      Declaracoes *declaracoes;
+      ListaDeCmd *listaDeCmd;
+      Union unionValue;
 }
 
 %define parse.error verbose
