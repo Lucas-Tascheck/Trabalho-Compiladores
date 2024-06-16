@@ -4,6 +4,23 @@
 #include <stdlib.h>
 #include "ast.h"
 
+typedef struct ListaParam ListaParam;
+typedef struct ListaDeFunc ListaDeFunc;
+
+struct ListaDeFunc {
+    char *nodeType;
+    char *tipo;
+    char *id;
+    ListaParam *listaParam;
+    ListaDeFunc *prox;
+};
+
+struct ListaParam {
+    char *tipo;
+    char *id;
+    ListaParam *prox;
+};
+
 
 int yyerror(const char *);
 int yylex();
