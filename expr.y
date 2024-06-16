@@ -7,6 +7,9 @@
 
 int yyerror(const char *);
 int yylex();
+//Colocar BlocoPrincipal
+//      | BlocoPrincipal
+//      em Programas
 
 %}
 %union {
