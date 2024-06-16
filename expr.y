@@ -64,6 +64,8 @@ int yylex();
 %type <doubleNum> Rel
 %type <doubleNum> OpLog
 %type <doubleNum> FatorLog
+%type <stringVal> TipoRetorno
+%type <stringVal> Tipo
 
 
 %%
@@ -120,7 +122,7 @@ FatorLog: TNUM
 
 
 Programa : ListaFuncoes BlocoPrincipal { $$ = $1; }
-         | BlocoPrincipal { $$ = $1; }
+         | BlocoPrincipal
          ;
 
 ListaFuncoes : ListaFuncoes Funcao {$$ = createFunc($1, $2)}
@@ -142,8 +144,8 @@ DeclParametros : DeclParametros COMMA Parametro {$$ = createParam($1, $3)}
 Parametro : Tipo ID {$$ = initParam($1, $2)}
           ;
 
-BlocoPrincipal : LBRACE Declaracoes ListaCmd RBRACE { $$ = $3; }
-               | LBRACE ListaCmd RBRACE { $$ = $2; }
+BlocoPrincipal : LBRACE Declaracoes ListaCmd RBRACE
+               | LBRACE ListaCmd RBRACE
                ;
 
 Declaracoes : Declaracoes Declaracao
@@ -162,29 +164,29 @@ ListaId : ListaId COMMA ID
         | ID
         ;
 
-Bloco : LBRACE ListaCmd RBRACE { $$ = $2; }
+Bloco : LBRACE ListaCmd RBRACE
       ;
 
-ListaCmd : ListaCmd Comando { $$ = $2; }
-         | Comando { $$ = $1; }
+ListaCmd : ListaCmd Comando
+         | Comando
          ;
 
-Comando : CmdSe { $$ = $1; } 
-        | CmdEnquanto { $$ = $1; }
-        | CmdAtrib { $$ = $1; }
-        | CmdEscrita { $$ = $1; }
-        | CmdLeitura { $$ = $1; }
-        | ChamadaProc { $$ = $1; }
-        | Retorno { $$ = $1; }
+Comando : CmdSe
+        | CmdEnquanto
+        | CmdAtrib
+        | CmdEscrita
+        | CmdLeitura
+        | ChamadaProc
+        | Retorno
         ;
 
-Retorno : RETURN Expr SEMICOLON { $$ = $2; }
-        | RETURN ID SEMICOLON { $$ = 1; }
-        | RETURN SEMICOLON { $$ = 1; }
+Retorno : RETURN Expr SEMICOLON
+        | RETURN ID SEMICOLON
+        | RETURN SEMICOLON
         ;
 
-CmdSe : IF TAPAR Rel TFPAR Bloco { $$ = $5; }
-      | IF TAPAR Rel TFPAR Bloco ELSE Bloco { if($3) $$ = $5; else $$ = 7; }
+CmdSe : IF TAPAR Rel TFPAR Bloco
+      | IF TAPAR Rel TFPAR Bloco ELSE Bloco
       ;
 
 CmdEnquanto : WHILE TAPAR Rel TFPAR Bloco
