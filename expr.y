@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include "ast.h"
 
 int yyerror(const char *);
 int yylex();
@@ -17,7 +18,7 @@ int yylex();
 
 %%
 
-Linha : Programa
+Linha : Programa {print("%s", $1->id);}
       ; 
 Expr  : Expr TADD Termo { $$ = $1 + $3; }
       | Expr TSUB Termo { $$ = $1 - $3; }
@@ -68,27 +69,27 @@ FatorLog: TNUM
         | ID
 
 
-Programa : ListaFuncoes BlocoPrincipal { $$ = $2; }
+Programa : ListaFuncoes BlocoPrincipal { $$ = $1; }
          | BlocoPrincipal { $$ = $1; }
          ;
 
-ListaFuncoes : ListaFuncoes Funcao 
-             | Funcao
+ListaFuncoes : ListaFuncoes Funcao {$$ = createFunc($1, $2)}
+             | Funcao {$$ = $1}
              ;
 
-Funcao : TipoRetorno ID TAPAR DeclParametros TFPAR BlocoPrincipal 
-       | TipoRetorno ID TAPAR TFPAR BlocoPrincipal
+Funcao : TipoRetorno ID TAPAR DeclParametros TFPAR BlocoPrincipal {$$ = initListaDeFunc(char "Func", $1, $2, $4)}
+       | TipoRetorno ID TAPAR TFPAR BlocoPrincipal {$$ = initListaDeFunc(char "Func", $1, $2, NULL)}
        ;
 
 TipoRetorno : Tipo
             | VOID
             ;
 
-DeclParametros : DeclParametros COMMA Parametro
-               | Parametro
+DeclParametros : DeclParametros COMMA Parametro {$$ = createParam($1, $3)}
+               | Parametro {$$ = $1}
                ;
 
-Parametro : Tipo ID
+Parametro : Tipo ID {$$ = initParam($1, $2)}
           ;
 
 BlocoPrincipal : LBRACE Declaracoes ListaCmd RBRACE { $$ = $3; }
