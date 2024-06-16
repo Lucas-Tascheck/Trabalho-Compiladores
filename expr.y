@@ -63,6 +63,7 @@ int yylex();
 %type <doubleNum> Fator
 %type <doubleNum> Rel
 %type <doubleNum> OpLog
+%type <doubleNum> FatorLog
 
 
 %%
