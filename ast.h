@@ -1,3 +1,6 @@
+#ifndef AST_H
+#define AST_H
+
 typedef struct Ifstruct Ifstruct;
 typedef struct Whilestruct Whilestruct;
 typedef struct ListaDeCmd ListaDeCmd;
@@ -69,3 +72,5 @@ Programa *addListaDeFunc(ListaDeFunc *nodo);
 ListaParam *createParam(ListaParam *left, ListaParam *right);
 ListaDeFunc *initListaDeFunc(char *nodetype, char *tipo, char *id, ListaParam *lista);
 ListaDeFunc *createFunc(ListaDeFunc *left, ListaDeFunc *right);
+
+#endif
