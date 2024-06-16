@@ -3,6 +3,7 @@ typedef struct Whilestruct Whilestruct;
 typedef struct ListaDeCmd ListaDeCmd;
 typedef struct Declaracoes Declaracoes;
 typedef struct ListaParam ListaParam;
+typedef struct ListaDeFunc ListaDeFunc;
 
 typedef enum Tag {If, While, Atrib, Escrita, Leitura, ChamaFunc} Tag;
 
@@ -44,13 +45,13 @@ struct ListaParam {
     ListaParam *prox;
 };
 
-typedef struct ListaDeFunc {
+struct ListaDeFunc {
     char *nodeType;
     char *tipo;
     char *id;
     ListaParam *listaParam;
     ListaDeFunc *prox;
-} ListaDeFunc;
+};
 
 typedef struct Bloco {
     char *nodeType;
