@@ -69,14 +69,14 @@ int yylex();
 
 Linha : Programa {printf("%s", $1->id);}
       ; 
-Expr  : Expr TADD Termo { $$ = $1 + $3; }
-      | Expr TSUB Termo { $$ = $1 - $3; }
+Expr  : Expr TADD Termo
+      | Expr TSUB Termo
       | Termo
       ;
 
 
-Termo : Termo TMUL Fator { $$ = $1 * $3; }
-      | Termo TDIV Fator { $$ = $1 / $3; }
+Termo : Termo TMUL Fator
+      | Termo TDIV Fator
       | Fator
       | ChamaFuncao
       ;
