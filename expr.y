@@ -3,8 +3,6 @@
 int yyerror(const char *);
 int yylex();
 
-#define YYSTYPE struct Types
-
 struct Types {
       double doubleNum;
       char *stringVal;
@@ -24,43 +22,43 @@ struct Types {
 %token SEMICOLON COMMA LBRACE RBRACE
 %token TADD TMUL TSUB TDIV EQ TAPAR TFPAR TNUM TLESS TMORE TEQUAL TDIFF TAND TOR TFIM ID
 
-%type <yylval.stringVal> STRING
-%type <yylval.stringVal> INT
-%type <yylval.stringVal> FLOAT
-%type <yylval.stringVal> VOID
-%type <yylval.doubleNum> IF
-%type <yylval.doubleNum> ELSE
-%type <yylval.doubleNum> WHILE
-%type <yylval.doubleNum> PRINT
-%type <yylval.doubleNum> READ
-%type <yylval.doubleNum> RETURN
-%type <yylval.doubleNum> SEMICOLON
-%type <yylval.doubleNum> COMMA
-%type <yylval.doubleNum> TADD
-%type <yylval.doubleNum> TMUL
-%type <yylval.doubleNum> TSUB
-%type <yylval.doubleNum> TDIV
-%type <yylval.doubleNum> EQ
-%type <yylval.doubleNum> TAPAR
-%type <yylval.doubleNum> TFPAR
-%type <yylval.doubleNum> TNUM
-%type <yylval.doubleNum> TLESS
-%type <yylval.doubleNum> TMORE
-%type <yylval.doubleNum> TEQUAL
-%type <yylval.doubleNum> TAND
-%type <yylval.doubleNum> TOR
-%type <yylval.doubleNum> TFIM
-%type <yylval.stringVal> ID
-%type <yylval.listaDeFunc> Programa
-%type <yylval.listaDeFunc> Linha
-%type <yylval.listaDeFunc> ListaFuncoes
-%type <yylval.listaDeFunc> Funcao
-%type <yylval.listaParam> DeclParametros 
-%type <yylval.listaParam> Parametro
-%type <yylval.doubleNum> Termo
-%type <yylval.doubleNum> Fator
-%type <yylval.stringVal> TipoRetorno
-%type <yylval.stringVal> Tipo
+%type <stringVal> STRING
+%type <stringVal> INT
+%type <stringVal> FLOAT
+%type <stringVal> VOID
+%type <doubleNum> IF
+%type <doubleNum> ELSE
+%type <doubleNum> WHILE
+%type <doubleNum> PRINT
+%type <doubleNum> READ
+%type <doubleNum> RETURN
+%type <doubleNum> SEMICOLON
+%type <doubleNum> COMMA
+%type <doubleNum> TADD
+%type <doubleNum> TMUL
+%type <doubleNum> TSUB
+%type <doubleNum> TDIV
+%type <doubleNum> EQ
+%type <doubleNum> TAPAR
+%type <doubleNum> TFPAR
+%type <doubleNum> TNUM
+%type <doubleNum> TLESS
+%type <doubleNum> TMORE
+%type <doubleNum> TEQUAL
+%type <doubleNum> TAND
+%type <doubleNum> TOR
+%type <doubleNum> TFIM
+%type <stringVal> ID
+%type <listaDeFunc> Programa
+%type <listaDeFunc> Linha
+%type <listaDeFunc> ListaFuncoes
+%type <listaDeFunc> Funcao
+%type <listaParam> DeclParametros 
+%type <listaParam> Parametro
+%type <doubleNum> Termo
+%type <doubleNum> Fator
+%type <stringVal> TipoRetorno
+%type <stringVal> Tipo
 
 
 %%
