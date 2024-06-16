@@ -2,8 +2,9 @@
 #include "ast.h"
 int yyerror(const char *);
 int yylex();
+%}
 
-struct Types {
+%union {
       double doubleNum;
       char *stringVal;
       Programa *programa;
@@ -11,9 +12,7 @@ struct Types {
       ListaParam *listaParam;
       Declaracoes *declaracoes;
       ListaDeCmd *listaDeCmd;
-};
-%}
-
+}
 
 %define parse.error verbose
 %token STRING
