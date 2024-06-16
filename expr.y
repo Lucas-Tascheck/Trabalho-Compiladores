@@ -61,7 +61,6 @@ int yylex();
 %type <doubleNum> Expr
 %type <doubleNum> Termo
 %type <doubleNum> Fator
-%type <doubleNum> Rel
 %type <doubleNum> FatorLog
 %type <stringVal> TipoRetorno
 %type <stringVal> Tipo
