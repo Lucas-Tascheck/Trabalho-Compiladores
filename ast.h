@@ -1,5 +1,5 @@
-#ifndef AST_H
-#define AST_H
+#ifndef __AST_H__
+#define __AST_H__
 
 typedef struct Ifstruct Ifstruct;
 typedef struct Whilestruct Whilestruct;

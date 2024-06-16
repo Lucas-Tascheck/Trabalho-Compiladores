@@ -4,8 +4,6 @@
 #include <stdlib.h>
 #include "ast.h"
 
-*define PROGRAMA Programa*
-
 Programa *programa; // Variável global para armazenar o programa principal
 
 Programa *initPrograma();
@@ -19,8 +17,8 @@ int yylex();
 
 %union {
       double doubleNum;
-      char *stringVal;
-      PROGRAMA *programa;
+      char *stringVal
+      Programa *programa;
       ListaDeFunc *listaDeFunc;
       ListaParam *listaParam;
       Declaracoes *declaracoes;
