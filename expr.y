@@ -27,8 +27,8 @@ int yylex();
 
 Linha : Programa {printf("%s", $1->id);}
       ; 
-Expr  : Expr TADD Termo { $$ = $1 + $3; }
-      | Expr TSUB Termo { $$ = $1 - $3; }
+Expr  : Expr TADD Termo { $$ = $1.double + $3.double; }
+      | Expr TSUB Termo { $$ = $1.double - $3.double; }
       | Termo
       ;
 
