@@ -8,7 +8,7 @@ int yyerror(const char *);
 int yylex();
 
 %}
-
+%define parse.error verbose
 %token STRING
 %token INT FLOAT VOID
 %token IF ELSE WHILE PRINT READ RETURN
@@ -17,9 +17,7 @@ int yylex();
 
 %%
 
-Linha : Expr TFIM { printf("Resultado: %lf\n", $1); exit(0); }
-      | Rel TFIM { if ($1) printf("True\n"); else printf("False\n"); exit(0); }
-	| Programa { printf("%lf\n", $1); exit(0); }
+Linha : Programa
       ; 
 Expr  : Expr TADD Termo { $$ = $1 + $3; }
       | Expr TSUB Termo { $$ = $1 - $3; }
@@ -30,10 +28,28 @@ Expr  : Expr TADD Termo { $$ = $1 + $3; }
 Termo : Termo TMUL Fator { $$ = $1 * $3; }
       | Termo TDIV Fator { $$ = $1 / $3; }
       | Fator
+      | ChamaFuncao
       ;
 
 Fator : TNUM 
-      | TAPAR Expr TFPAR { $$ = $2; }
+      | TAPAR Expr TFPAR 
+      ;
+
+ExprSTR  : ExprSTR TADD Termo2 
+      | ExprSTR TSUB Termo2 
+      | Termo2
+      ;
+
+
+Termo2 : Termo2 TMUL Fator2
+      | Termo2 TDIV Fator2 
+      | Fator2
+      | ChamaFuncao
+      ;
+
+Fator2 : ID 
+      | TNUM
+      | TAPAR ExprSTR TFPAR 
       ;
 
 Rel   : Rel TAND OpLog { $$ = $1 && $3; }
@@ -41,12 +57,17 @@ Rel   : Rel TAND OpLog { $$ = $1 && $3; }
 	  | OpLog
       ;
 
-OpLog : TNUM TMORE TNUM { $$ = $1 > $3; }
-      | TNUM TLESS TNUM { $$ = $1 < $3; }
-      | TNUM TEQUAL TNUM { $$ = $1 == $3; }
-      | TNUM TDIFF TNUM { $$ = $1 != $3; }
-      | TNUM { $$ = $1; }
+OpLog : FatorLog TMORE FatorLog { $$ = $1 > $3; }
+      | FatorLog TLESS FatorLog { $$ = $1 < $3; }
+      | FatorLog TEQUAL FatorLog { $$ = $1 == $3; }
+      | FatorLog TDIFF FatorLog { $$ = $1 != $3; }
+      | FatorLog { $$ = $1; }
       ;
+
+FatorLog: TNUM
+        | ID
+
+
 Programa : ListaFuncoes BlocoPrincipal { $$ = $2; }
          | BlocoPrincipal { $$ = $1; }
          ;
@@ -119,6 +140,7 @@ CmdEnquanto : WHILE TAPAR Rel TFPAR Bloco
             ;
 
 CmdAtrib : ID EQ Expr SEMICOLON
+         | ID EQ ExprSTR SEMICOLON
          | ID EQ ID SEMICOLON
          ;
 

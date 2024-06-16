@@ -1,1 +1,1 @@
-int teste(int testando){    if(1 < 2){        return;    }}{    function(teste);    return 1+1;}
+int fat(int n){	int f;	f = 0;	while(n>0)	{		f=f*n;		n = n-1;	}	return f;}{	int a,b;	a= f(5);	b = f(4) +1;}

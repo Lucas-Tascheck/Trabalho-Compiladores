@@ -12,7 +12,7 @@ struct ExpressionValue {
 };
 %}
 
-delim	[ \t]
+delim	[ \t\n]
 ws	{delim}+
 digito	[0-9]
 num	{digito}+(\.{digito}*(E[+-]?{digito}+)?)?
