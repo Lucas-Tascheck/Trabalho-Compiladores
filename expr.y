@@ -23,9 +23,9 @@ int yylex();
 %token TADD TMUL TSUB TDIV EQ TAPAR TFPAR TNUM TLESS TMORE TEQUAL TDIFF TAND TOR TFIM ID
 
 %type <stringVal> STRING
-%type <doubleNum> INT
-%type <doubleNum> FLOAT
-%type <doubleNum> VOID
+%type <stringVal> INT
+%type <stringVal> FLOAT
+%type <stringVal> VOID
 %type <doubleNum> IF
 %type <doubleNum> ELSE
 %type <doubleNum> WHILE
@@ -66,6 +66,7 @@ int yylex();
 %type <stringVal> TipoRetorno
 %type <stringVal> Tipo
 %type <doubleNum> ChamaFuncao
+%type <listaDeFunc> BlocoPrincipal
 
 
 %%
@@ -126,11 +127,11 @@ Programa : ListaFuncoes BlocoPrincipal { $$ = $1; }
          ;
 
 ListaFuncoes : ListaFuncoes Funcao {$$ = createFunc($1, $2);}
-             | Funcao {$$ = $1}
+             | Funcao {$$ = $1;}
              ;
 
-Funcao : TipoRetorno ID TAPAR DeclParametros TFPAR BlocoPrincipal {$$ = initListaDeFunc(char "Func", $1, $2, $4);}
-       | TipoRetorno ID TAPAR TFPAR BlocoPrincipal {$$ = initListaDeFunc(char "Func", $1, $2, NULL);}
+Funcao : TipoRetorno ID TAPAR DeclParametros TFPAR BlocoPrincipal {$$ = initListaDeFunc("Func", $1, $2, $4);}
+       | TipoRetorno ID TAPAR TFPAR BlocoPrincipal {$$ = initListaDeFunc("Func", $1, $2, NULL);}
        ;
 
 TipoRetorno : Tipo
