@@ -1,5 +1,7 @@
 %{
 #include "ast.h"
+int yyerror(const char *);
+int yylex();
 
 Programa *programa; // Variável global para armazenar o programa principal
 
@@ -8,8 +10,6 @@ ListaDeFunc *initListaDeFunc(char *nodetype, char *tipo, char *id, ListaParam *l
 ListaParam *initParam(char *tipo, char *id);
 Programa *addListaDeFunc(ListaDeFunc *nodo);
 
-int yyerror(const char *);
-int yylex();
 %}
 
 %union {
@@ -20,7 +20,6 @@ int yylex();
       ListaParam *listaParam;
       Declaracoes *declaracoes;
       ListaDeCmd *listaDeCmd;
-      Union unionValue;
 }
 
 %define parse.error verbose
