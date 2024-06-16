@@ -47,7 +47,6 @@ int yylex();
 %type <doubleNum> TLESS
 %type <doubleNum> TMORE
 %type <doubleNum> TEQUAL
-%type <doubleNum> TEDIFF
 %type <doubleNum> TAND
 %type <doubleNum> TOR
 %type <doubleNum> TFIM
@@ -66,6 +65,7 @@ int yylex();
 %type <doubleNum> FatorLog
 %type <stringVal> TipoRetorno
 %type <stringVal> Tipo
+%type <doubleNum> ChamaFuncao
 
 
 %%
@@ -125,23 +125,23 @@ Programa : ListaFuncoes BlocoPrincipal { $$ = $1; }
          | BlocoPrincipal
          ;
 
-ListaFuncoes : ListaFuncoes Funcao {$$ = createFunc($1, $2)}
+ListaFuncoes : ListaFuncoes Funcao {$$ = createFunc($1, $2);}
              | Funcao {$$ = $1}
              ;
 
-Funcao : TipoRetorno ID TAPAR DeclParametros TFPAR BlocoPrincipal {$$ = initListaDeFunc(char "Func", $1, $2, $4)}
-       | TipoRetorno ID TAPAR TFPAR BlocoPrincipal {$$ = initListaDeFunc(char "Func", $1, $2, NULL)}
+Funcao : TipoRetorno ID TAPAR DeclParametros TFPAR BlocoPrincipal {$$ = initListaDeFunc(char "Func", $1, $2, $4);}
+       | TipoRetorno ID TAPAR TFPAR BlocoPrincipal {$$ = initListaDeFunc(char "Func", $1, $2, NULL);}
        ;
 
 TipoRetorno : Tipo
             | VOID
             ;
 
-DeclParametros : DeclParametros COMMA Parametro {$$ = createParam($1, $3)}
-               | Parametro {$$ = $1}
+DeclParametros : DeclParametros COMMA Parametro {$$ = createParam($1, $3);}
+               | Parametro {$$ = $1;}
                ;
 
-Parametro : Tipo ID {$$ = initParam($1, $2)}
+Parametro : Tipo ID {$$ = initParam($1, $2);}
           ;
 
 BlocoPrincipal : LBRACE Declaracoes ListaCmd RBRACE
