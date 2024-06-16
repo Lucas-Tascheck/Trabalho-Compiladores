@@ -1,17 +1,12 @@
-code requires%{ 
+%{ 
 #include <stdio.h>
 #include <stdlib.h>
-#include "ast.h"
-
-Programa *programa;
-ListaDeFunc *listaDeFunc;
-ListaParam *listaParam;
-Declaracoes *declaracoes;
-ListaDeCmd *listaDeCmd;
 
 int yyerror(const char *);
 int yylex();
 %}
+
+%code requires {#include "ast.h"}
 
 %union {
       double doubleNum;
