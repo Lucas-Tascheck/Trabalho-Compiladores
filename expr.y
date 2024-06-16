@@ -1,11 +1,11 @@
 %{
-#define YYSTYPE struct NodeTypes
+#define YYSTYPE union;
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include "ast.h"
 
-struct NodeTypes {
+%union {
       double doubleNum;
       ListaParam *listaParam;
       ListaDeFunc *listaDeFunc;
