@@ -1,5 +1,4 @@
 %{
-#define YYSTYPE union;
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -12,23 +11,75 @@ int yylex();
 %}
 %union {
       double doubleNum;
-      char *string;
+      char *stringVal;
       ListaParam *listaParam;
       ListaDeFunc *listaDeFunc;
 }
 %define parse.error verbose
-%token<string> STRING
-%token<double> INT FLOAT VOID
-%token<double> IF ELSE WHILE PRINT READ RETURN
-%token<double> SEMICOLON COMMA LBRACE RBRACE
-%token<double> TADD TMUL TSUB TDIV EQ TAPAR TFPAR TNUM TLESS TMORE TEQUAL TDIFF TAND TOR TFIM ID
+%token STRING
+%token INT FLOAT VOID
+%token IF ELSE WHILE PRINT READ RETURN
+%token SEMICOLON COMMA LBRACE RBRACE
+%token TADD TMUL TSUB TDIV EQ TAPAR TFPAR TNUM TLESS TMORE TEQUAL TDIFF TAND TOR TFIM ID
+
+%type <stringVal> STRING
+%type <doubleNum> INT
+%type <doubleNum> FLOAT
+%type <doubleNum> VOID
+%type <doubleNum> IF
+%type <doubleNum> ELSE
+%type <doubleNum> WHILE
+%type <doubleNum> PRINT
+%type <doubleNum> READ
+%type <doubleNum> RETURN
+%type <doubleNum> SEMICOLON
+%type <doubleNum> COMMA
+%type <doubleNum> LBRACE
+%type <doubleNum> RBRACE
+%type <doubleNum> TADD
+%type <doubleNum> TMUL
+%type <doubleNum> TSUB
+%type <doubleNum> TDIV
+%type <doubleNum> EQ
+%type <doubleNum> TAPAR
+%type <doubleNum> TFPAR
+%type <doubleNum> TNUM
+%type <doubleNum> TLESS
+%type <doubleNum> TMORE
+%type <doubleNum> TEQUAL
+%type <doubleNum> TEDIFF
+%type <doubleNum> TAND
+%type <doubleNum> TOR
+%type <doubleNum> TFIM
+%type <doubleNum> ID
+
+%}
+%union {
+      double doubleNum;
+      char *stringVal;
+      ListaParam *listaParam;
+      ListaDeFunc *listaDeFunc;
+}
+
+%type <listaDeFunc> Programa
+%type <listaDeFunc> Linha
+%type <listaDeFunc> ListaFuncoes
+%type <listaDeFunc> Funcao
+%type <listaParam> DeclParametros 
+%type <listaParam> Parametro
+%type <doubleNum> Expr
+%type <doubleNum> Termo
+%type <doubleNum> Fator
+%type <doubleNum> Rel
+%type <doubleNum> OpLog
+
 
 %%
 
 Linha : Programa {printf("%s", $1->id);}
       ; 
-Expr  : Expr TADD Termo { $$ = $1.doubleNum + $3.doubleNum; }
-      | Expr TSUB Termo { $$ = $1.doubleNum - $3.doubleNum; }
+Expr  : Expr TADD Termo { $$ = $1 + $3; }
+      | Expr TSUB Termo { $$ = $1 - $3; }
       | Termo
       ;
 
