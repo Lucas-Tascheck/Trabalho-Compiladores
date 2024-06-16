@@ -1,5 +1,6 @@
 #include "ast.h"
-
+#include <stdio.h>
+#include <stdlib.h>
 Programa *initPrograma(){
     Programa *p = (Programa*)malloc(sizeof(Programa));
     p->bloco = NULL;
