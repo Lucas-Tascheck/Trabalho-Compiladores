@@ -131,7 +131,7 @@ DeclParametros : DeclParametros COMMA Parametro {$$ = createParam($1, $3);}
                | Parametro {$$ = $1;}
                ;
 
-Parametro : Tipo ID {$$ = initParam($1, $2);}
+Parametro : Tipo ID {$$ = initParam($1, $2);printf("ID = %s", $2);}
           ;
 
 BlocoPrincipal : LBRACE Declaracoes ListaCmd RBRACE
