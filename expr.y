@@ -34,8 +34,6 @@ int yylex();
 %type <doubleNum> RETURN
 %type <doubleNum> SEMICOLON
 %type <doubleNum> COMMA
-%type <doubleNum> LBRACE
-%type <doubleNum> RBRACE
 %type <doubleNum> TADD
 %type <doubleNum> TMUL
 %type <doubleNum> TSUB
