@@ -5,16 +5,16 @@
 #include <stdlib.h>
 #include "ast.h"
 
-%union {
-      double doubleNum;
-      ListaParam *listaParam;
-      ListaDeFunc *listaDeFunc;
-}
 
 int yyerror(const char *);
 int yylex();
 
 %}
+%union {
+      double doubleNum;
+      ListaParam *listaParam;
+      ListaDeFunc *listaDeFunc;
+}
 %define parse.error verbose
 %token STRING
 %token INT FLOAT VOID
