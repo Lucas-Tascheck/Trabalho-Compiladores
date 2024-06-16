@@ -64,7 +64,7 @@ int yylex();
 
 %%
 
-Linha : Programa {printf("%s", $1->id);}
+Linha : Programa {printf("%s", $1->tipo);}
       ; 
 
 Expr  : Expr TADD Termo
@@ -125,8 +125,8 @@ Funcao : TipoRetorno ID TAPAR DeclParametros TFPAR BlocoPrincipal {$$ = initList
        | TipoRetorno ID TAPAR TFPAR BlocoPrincipal {$$ = initListaDeFunc("Func", $1, $2, NULL);}
        ;
 
-TipoRetorno : Tipo
-            | VOID
+TipoRetorno : Tipo {$$ = $1;}
+            | VOID {$$ = "void";}
             ;
 
 DeclParametros : DeclParametros COMMA Parametro {$$ = createParam($1, $3);}
@@ -147,9 +147,9 @@ Declaracoes : Declaracoes Declaracao
 Declaracao : Tipo ListaId SEMICOLON
            ;
 
-Tipo : INT
-     | STRING
-     | FLOAT
+Tipo : INT {$$ = "int";}
+     | STRING {$$ = "string";}
+     | FLOAT {$$ = "float";}
      ;
 
 
