@@ -12,15 +12,16 @@ int yylex();
 %}
 %union {
       double doubleNum;
+      char *string;
       ListaParam *listaParam;
       ListaDeFunc *listaDeFunc;
 }
 %define parse.error verbose
-%token STRING
-%token INT FLOAT VOID
-%token IF ELSE WHILE PRINT READ RETURN
-%token SEMICOLON COMMA LBRACE RBRACE
-%token TADD TMUL TSUB TDIV EQ TAPAR TFPAR TNUM TLESS TMORE TEQUAL TDIFF TAND TOR TFIM ID
+%token<string> STRING
+%token<double> INT FLOAT VOID
+%token<double> IF ELSE WHILE PRINT READ RETURN
+%token<double> SEMICOLON COMMA LBRACE RBRACE
+%token<double> TADD TMUL TSUB TDIV EQ TAPAR TFPAR TNUM TLESS TMORE TEQUAL TDIFF TAND TOR TFIM ID
 
 %%
 
