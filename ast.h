@@ -1,6 +1,10 @@
 #ifndef __AST_H__
 #define __AST_H__
 
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
 typedef struct Ifstruct Ifstruct;
 typedef struct Whilestruct Whilestruct;
 typedef struct ListaDeCmd ListaDeCmd;
