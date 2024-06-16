@@ -41,14 +41,3 @@ ListaDeFunc *createFunc(ListaDeFunc *left, ListaDeFunc *right){
 Programa *addListaDeFunc(ListaDeFunc *nodo){
 
 }
-
-
-int main(){
-    ListaParam *p = initParam("Tipo1", "id1");
-    ListaParam *p2 = initParam("Tipo2", "id2");
-    ListaParam *c = createParam(p, p2);
-    ListaParam *p3 = initParam("Tipo3", "id3");
-    ListaParam *c2 = createParam(c, p3);
-    printf("%s", c2->prox->tipo);
-    return 0;
-}
