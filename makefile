@@ -7,7 +7,7 @@ lex.yy.c: expr.l
 	flex expr.l
 
 main: lex.yy.c expr.tab.c 
-	gcc -o expr lex.yy.c expr.tab.c exprMain.c -lfl
+	gcc -o expr lex.yy.c expr.tab.c exprMain.c ast.c -lfl
 	
 clean: 
 	rm -f lex.yy.c expr.tab.c expr.tab.h
