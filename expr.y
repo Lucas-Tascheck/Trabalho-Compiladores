@@ -64,6 +64,7 @@ int yylex();
 %type <stringVal> TipoRetorno
 %type <stringVal> Tipo
 %type <doubleNum> ChamaFuncao
+%type <listaDeFunc> BlocoPrincipal
 
 
 %%
@@ -119,8 +120,7 @@ FatorLog: TNUM
         | ID
 
 
-Programa : ListaFuncoes BlocoPrincipal { $$ = $1; }
-         | BlocoPrincipal
+Programa : ListaFuncoes { $$ = $1; }
          ;
 
 ListaFuncoes : ListaFuncoes Funcao {$$ = createFunc($1, $2);}
