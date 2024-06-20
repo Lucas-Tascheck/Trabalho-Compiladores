@@ -10,7 +10,7 @@ int yylex();
 
 %union {
       double doubleNum;
-      char *stringVal;
+      char* stringVal;
       Programa *programa;
       ListaDeFunc *listaDeFunc;
       ListaParam *listaParam;

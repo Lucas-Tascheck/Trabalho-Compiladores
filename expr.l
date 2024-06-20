@@ -1,13 +1,13 @@
 %option noyywrap
 
 %{
-#define YYSTYPE struct ExpressionValue
+#define YYSTYPE char*
 #include "ast.h"
 #include "expr.tab.h"
 
 struct ExpressionValue {
     double num_value;
-    char *str_value;
+    char* str_value;
 };
 %}
 
@@ -50,8 +50,8 @@ id	[a-zA-Z][a-zA-Z0-9]*
 "}"     {return RBRACE;}
 \n      {return TFIM;}
 
-{num}   {yylval.num_value = atof(yytext); return TNUM;}
-{id}    {yylval.str_value = strdup(yytext); return ID;}
+{num}   {yylval = strdup(yytext); return TNUM;}
+{id}    {yylval = strdup(yytext); return ID;}
 
 . { fprintf(stderr, "Caractere inválido: %s\n", yytext); }
 
