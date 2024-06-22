@@ -37,8 +37,12 @@ ListaDeFunc *initListaDeFunc(char *nodetype, char *tipo, char *id, ListaParam *l
 }
 
 ListaDeFunc *createFunc(ListaDeFunc *left, ListaDeFunc *right){
-    right->prox = left;
-    return right;
+    ListaDeFunc *p = left;
+    while(p->prox != NULL){
+        p = p->prox;
+    }
+    p->prox = right;
+    return left;
 }
 
 Programa *addListaDeFunc(ListaDeFunc *nodo){
