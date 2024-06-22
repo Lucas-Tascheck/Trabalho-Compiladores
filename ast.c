@@ -18,8 +18,12 @@ ListaParam *initParam(char *tipo, char *id){
 }
 
 ListaParam *createParam(ListaParam *left, ListaParam *right){
-    right->prox = left;
-    return right;
+    ListaParam *p = left;
+    while(p->prox != NULL){
+        p = p->prox;
+    }
+    p->prox = right;
+    return left;
 }
 
 ListaDeFunc *initListaDeFunc(char *nodetype, char *tipo, char *id, ListaParam *lista){
