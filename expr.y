@@ -9,13 +9,12 @@ int yylex();
 %code requires {#include "ast.h"}
 
 %union {
-      double doubleNum;
-      char* stringVal;
       Programa *programa;
       ListaDeFunc *listaDeFunc;
       ListaParam *listaParam;
       Declaracoes *declaracoes;
       ListaDeCmd *listaDeCmd;
+      BlocoPrincipal *blocoPrincipal;
 }
 
 %define parse.error verbose
@@ -24,45 +23,18 @@ int yylex();
 %token IF ELSE WHILE PRINT READ RETURN
 %token SEMICOLON COMMA LBRACE RBRACE
 %token TADD TMUL TSUB TDIV EQ TAPAR TFPAR TNUM TLESS TMORE TEQUAL TDIFF TAND TOR TFIM ID
-%type <stringVal> STRING
-%type <stringVal> INT
-%type <stringVal> FLOAT
-%type <stringVal> VOID
-%type <doubleNum> IF
-%type <doubleNum> ELSE
-%type <doubleNum> WHILE
-%type <doubleNum> PRINT
-%type <doubleNum> READ
-%type <doubleNum> RETURN
-%type <doubleNum> SEMICOLON
-%type <doubleNum> COMMA
-%type <doubleNum> TADD
-%type <doubleNum> TMUL
-%type <doubleNum> TSUB
-%type <doubleNum> TDIV
-%type <doubleNum> EQ
-%type <doubleNum> TAPAR
-%type <doubleNum> TFPAR
-%type <doubleNum> TNUM
-%type <doubleNum> TLESS
-%type <doubleNum> TMORE
-%type <doubleNum> TEQUAL
-%type <doubleNum> TAND
-%type <doubleNum> TOR
-%type <doubleNum> TFIM
-%type <stringVal> ID
-%type <listaDeFunc> Programa
+%type <programa> Programa
 %type <listaDeFunc> Linha
 %type <listaDeFunc> ListaFuncoes
 %type <listaDeFunc> Funcao
 %type <listaParam> DeclParametros 
 %type <listaParam> Parametro
-%type <stringVal> TipoRetorno
-%type <stringVal> Tipo
-
+%type <blocoPrincipal> BlocoPrincipal
+%type <declaracoes> Declaracao
+%type <declaracoes> Declaracoes
 %%
 
-Linha : Programa {printf("%s", $1->tipo);}
+Linha : Programa {printf("%s", $1->listaDeFunc->tipo);}
       ; 
 
 Expr  : Expr TADD Termo
@@ -112,15 +84,16 @@ OpLog : FatorLog TMORE FatorLog
 FatorLog: TNUM
         | ID
 
-Programa : ListaFuncoes { $$ = $1; }
+Programa : ListaFuncoes BlocoPrincipal {$$ = initPrograma($1, $2);}
+         | BlocoPrincipal {$$ = initPrograma(NULL, $1);}
          ;
 
 ListaFuncoes : ListaFuncoes Funcao {$$ = createFunc($1, $2);}
              | Funcao {$$ = $1;}
              ;
 
-Funcao : TipoRetorno ID TAPAR DeclParametros TFPAR BlocoPrincipal {$$ = initListaDeFunc("Func", $1, $2, $4);}
-       | TipoRetorno ID TAPAR TFPAR BlocoPrincipal {$$ = initListaDeFunc("Func", $1, $2, NULL);}
+Funcao : TipoRetorno ID TAPAR DeclParametros TFPAR BlocoPrincipal {$$ = initListaDeFunc("Func", $1, $2, $4, $6);}
+       | TipoRetorno ID TAPAR TFPAR BlocoPrincipal {$$ = initListaDeFunc("Func", $1, $2, NULL, $5);}
        ;
 
 TipoRetorno : Tipo {$$ = $1;}
@@ -134,15 +107,15 @@ DeclParametros : DeclParametros COMMA Parametro {$$ = createParam($1, $3);}
 Parametro : Tipo ID {$$ = initParam($1, $2);}
           ;
 
-BlocoPrincipal : LBRACE Declaracoes ListaCmd RBRACE
-               | LBRACE ListaCmd RBRACE
+BlocoPrincipal : LBRACE Declaracoes ListaCmd RBRACE {$$ = initBlocoPrincipal($2, NULL);}
+               | LBRACE ListaCmd RBRACE {$$ = initBlocoPrincipal(NULL, NULL);}
                ;
 
-Declaracoes : Declaracoes Declaracao
-            | Declaracao
+Declaracoes : Declaracoes Declaracao {$$ = addDeclaracoes($1, $2);}
+            | Declaracao {$$ = $1;}
             ;
 
-Declaracao : Tipo ListaId SEMICOLON
+Declaracao : Tipo ListaId SEMICOLON {$$ = initDeclaracoes($1, $2);}
            ;
 
 Tipo : INT {$$ = "int";}

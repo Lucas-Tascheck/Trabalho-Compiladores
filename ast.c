@@ -1,9 +1,10 @@
 #include "ast.h"
 #include <stdio.h>
 #include <stdlib.h>
+
 Programa *initPrograma(){
     Programa *p = (Programa*)malloc(sizeof(Programa));
-    p->bloco = NULL;
+    p->blocoPrincipal = NULL;
     p->listaDeFunc = NULL;
     p->nodeType = "Programa";
     return p;
@@ -26,12 +27,13 @@ ListaParam *createParam(ListaParam *left, ListaParam *right){
     return left;
 }
 
-ListaDeFunc *initListaDeFunc(char *nodetype, char *tipo, char *id, ListaParam *lista){
+ListaDeFunc *initListaDeFunc(char *nodetype, char *tipo, char *id, ListaParam *lista, BlocoPrincipal *blocoPrincipal){
     ListaDeFunc *l = (ListaDeFunc*)malloc(sizeof(ListaDeFunc));
     l->nodeType = nodetype;
     l->tipo = tipo;
     l->id = id;
     l->listaParam = lista;
+    l->blocoPrincipal = blocoPrincipal;
     l->prox = NULL;
     return l;
 }
@@ -45,6 +47,33 @@ ListaDeFunc *createFunc(ListaDeFunc *left, ListaDeFunc *right){
     return left;
 }
 
-Programa *addListaDeFunc(ListaDeFunc *nodo){
+Declaracoes *initDeclaracoes(char *tipo, char *id){
+    Declaracoes *declaracao = (Declaracoes*)malloc(sizeof(Declaracoes));
+    declaracao->tipo = tipo;
+    declaracao->id = id;
+    declaracao->prox = NULL;
+    return declaracao;
+}
 
+Declaracoes *addDeclaracoes(Declaracoes *left, Declaracoes *right){
+    Declaracoes *p = left;
+    while(p->prox != NULL){
+        p = p->prox;
+    }
+    p->prox = right;
+    return left;
+}
+
+BlocoPrincipal *initBlocoPrincipal(Declaracoes *declaracoes, ListaDeCmd *listaDeCmd){
+    BlocoPrincipal *blocoPrincipal = (BlocoPrincipal*)malloc(sizeof(BlocoPrincipal));
+    blocoPrincipal->listaDeDeclaracoes = declaracoes;
+    blocoPrincipal->listaDeCmd = listaDeCmd;
+    return blocoPrincipal;
+}
+
+Programa *initPrograma(ListaDeFunc *listaDeFunc, BlocoPrincipal *blocoPrincipal){
+    Programa *programa = (Programa*)malloc(sizeof(Programa));
+    programa->listaDeFunc = listaDeFunc;
+    programa->blocoPrincipal = blocoPrincipal;
+    return programa;
 }
