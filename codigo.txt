@@ -1,4 +1,4 @@
-float fat(int b)
+float fat(int b, int a, float k, string a)
 {
 	return;
 }
