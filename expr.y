@@ -38,9 +38,6 @@ int yylex();
 %type <str> Tipo
 %type <str> ID 
 %type <listaId> ListaId
-%type <str> 
-%type <str> 
-%type <str> 
 %%
 
 Linha : Programa {printf("%s", $1->listaDeFunc->tipo);}
