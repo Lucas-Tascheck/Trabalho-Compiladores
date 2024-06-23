@@ -54,12 +54,12 @@ int yylex();
 %type <str> Tipo
 %type <str> ID 
 %type <str> TNUM 
-%type <Expr> Expr 
-%type <Expr> Fator
-%type <Expr> Termo
-%type <Rel> Rel 
-%type <Rel> OpLog
-%type <Rel> FatorLog
+%type <expr> Expr 
+%type <expr> Fator
+%type <expr> Termo
+%type <rel> Rel 
+%type <rel> OpLog
+%type <rel> FatorLog
 %type <listaId> ListaId
 %%
 
