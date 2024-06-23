@@ -22,16 +22,6 @@ typedef struct Bloco {
     ListaDeCmd *listaDeCmd;
 } Bloco;
 
-typedef struct Comando {
-    char *op;
-    Ifstruct *ifstruct;
-    Whilestruct *whilestruct;
-    Atrib *atrib;
-    Escrita *escrita;
-    Leitura *leitura;
-    ChamaFunc *chamaFunc;
-    Return *returnn;
-}Comando;
 
 struct ListaParamChamafunc {
     char *id;
@@ -80,6 +70,17 @@ typedef struct Atrib {
     char *id2;
     Expr *expr;
 }Atrib;
+
+typedef struct Comando {
+    char *op;
+    Ifstruct *ifstruct;
+    Whilestruct *whilestruct;
+    Atrib *atrib;
+    Escrita *escrita;
+    Leitura *leitura;
+    ChamaFunc *chamaFunc;
+    Return *returnn;
+}Comando;
 
 struct ListaDeCmd {
     char *cmd;
