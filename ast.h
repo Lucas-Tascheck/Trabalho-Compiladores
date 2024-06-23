@@ -5,34 +5,52 @@
 #include <string.h>
 #include <stdlib.h>
 
-typedef struct Ifstruct Ifstruct;
-typedef struct Whilestruct Whilestruct;
 typedef struct ListaDeCmd ListaDeCmd;
 typedef struct Declaracoes Declaracoes;
 typedef struct ListaParam ListaParam;
 typedef struct ListaDeFunc ListaDeFunc;
 typedef struct BlocoPrincipal BlocoPrincipal;
 typedef struct ListaId ListaId;
+typedef struct Rel Rel;
+typedef struct Expr Expr;
 
 typedef enum Tag {If, While, Atrib, Escrita, Leitura, ChamaFunc} Tag;
 
-struct Ifstruct {
+typedef struct Ifstruct {
     char *nodeType;
-    char op;
-    Ifstruct *esq;
-    Ifstruct *dir;
-};
+    Rel *rel;
+    Bloco *blocoIf;
+    Bloco *blocoElse;
+}Ifstruct;
 
-struct Whilestruct {
-    char op;
-    Whilestruct *esq;
-    Whilestruct *dir;
-};
+typedef struct Whilestruct {
+    char *nodeType;
+    Rel *rel;
+    Bloco *blocoWhile;
+}Whilestruct;
+
+typedef struct CmdAtrib {
+    char *nodeType;
+    char *id;
+
+}CmdAtrib;
 
 typedef union Union {
   Ifstruct *If;
   Whilestruct *While;
 } Union;
+
+struct Rel {
+    char *op;
+    Rel *left;
+    Rel *right;
+};
+
+struct Expr {
+    char *op;
+    Expr *left;
+    Expr *right;
+}
 
 struct ListaDeCmd {
     Tag tag;
@@ -73,6 +91,11 @@ typedef struct BlocoPrincipal {
     Declaracoes *listaDeDeclaracoes;
     ListaDeCmd *listaDeCmd;
 } BlocoPrincipal;
+
+typedef struct Bloco {
+    char *nodeType;
+    ListaDeCmd *listaDeCmd;
+} Bloco;
 
 typedef struct Programa {
     char *nodeType;

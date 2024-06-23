@@ -17,6 +17,8 @@ int yylex();
       ListaDeCmd *listaDeCmd;
       BlocoPrincipal *blocoPrincipal;
       ListaId *listaId;
+      Expr *expr;
+      Rel *rel;
 }
 
 %define parse.error verbose
@@ -37,6 +39,9 @@ int yylex();
 %type <str> TipoRetorno
 %type <str> Tipo
 %type <str> ID 
+%type <str> TNUM 
+%type <Expr> Expr 
+%type <Rel> Rel 
 %type <listaId> ListaId
 %%
 
@@ -59,20 +64,10 @@ Fator : TNUM
       | TAPAR Expr TFPAR 
       ;
 
-ExprSTR  : ExprSTR TADD Termo2 
-      | ExprSTR TSUB Termo2 
-      | Termo2
-      ;
-
 Termo2 : Termo2 TMUL Fator2
       | Termo2 TDIV Fator2 
       | Fator2
       | ChamaFuncao
-      ;
-
-Fator2 : ID 
-      | TNUM
-      | TAPAR ExprSTR TFPAR 
       ;
 
 Rel   : Rel TAND OpLog
@@ -164,7 +159,6 @@ CmdEnquanto : WHILE TAPAR Rel TFPAR Bloco
             ;
 
 CmdAtrib : ID EQ Expr SEMICOLON
-         | ID EQ ExprSTR SEMICOLON
          | ID EQ ID SEMICOLON
          ;
 
