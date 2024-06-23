@@ -222,7 +222,7 @@ void imprimeArvore(Programa *raiz){
             listaDeParam = listaDeParam->prox;
         }
         printf("%s %s){\n", listaDeParam->tipo, listaDeParam->id);
-
+        listaDeFunc = listaDeFunc->prox;
 
     }
 }
