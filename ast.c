@@ -56,7 +56,7 @@ Declaracoes *addDeclaracoes(Declaracoes *left, Declaracoes *right){
     return left;
 }
 
-BlocoPrincipal *initBlocoPrincipal(Declaracoes *declaracoes, ListaDeCmd *listaDeCmd){
+BlocoPrincipal *initBlocoPrincipal(Declaracoes *declaracoes, Comando *listaDeCmd){
     BlocoPrincipal *blocoPrincipal = (BlocoPrincipal*)malloc(sizeof(BlocoPrincipal));
     blocoPrincipal->listaDeDeclaracoes = declaracoes;
     blocoPrincipal->listaDeCmd = listaDeCmd;
@@ -204,7 +204,7 @@ Whilestruct *initWhile(char *nodeType, Rel *rel, Bloco *blocoWhile){
     whileStruct->blocoWhile = blocoWhile;
 }
 
-Bloco *initBloco(char *nodeType, ListaDeCmd *listaDeCmd){
+Bloco *initBloco(char *nodeType, Comando *listaDeCmd){
     Bloco *bloco = (Bloco*)malloc(sizeof(Bloco));
     bloco->nodeType = nodeType;
     bloco->listaDeCmd = listaDeCmd;

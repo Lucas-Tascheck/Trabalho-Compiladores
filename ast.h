@@ -5,7 +5,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-typedef struct ListaDeCmd ListaDeCmd;
 typedef struct Declaracoes Declaracoes;
 typedef struct ListaParam ListaParam;
 typedef struct ListaDeFunc ListaDeFunc;
@@ -20,7 +19,7 @@ typedef struct Expr Expr;
 
 typedef struct Bloco {
     char *nodeType;
-    ListaDeCmd *listaDeCmd;
+    Comando *listaDeCmd;
 } Bloco;
 
 struct ListaParamChamafunc {
@@ -83,14 +82,6 @@ struct Comando {
     Comando *prox;
 };
 
-struct ListaDeCmd {
-    char *cmd;
-    Ifstruct *ifstruct;
-    Whilestruct *whilestruct;
-    Atrib *atrib;
-    ListaDeCmd *prox;
-};
-
 struct Rel {
     char *op;
     char *value;
@@ -137,7 +128,7 @@ struct ListaId {
 typedef struct BlocoPrincipal {
     char *nodeType;
     Declaracoes *listaDeDeclaracoes;
-    ListaDeCmd *listaDeCmd;
+    Comando *listaDeCmd;
 } BlocoPrincipal;
 
 
@@ -154,7 +145,7 @@ ListaDeFunc *initListaDeFunc(char *nodetype, char *tipo, char *id, ListaParam *l
 ListaDeFunc *createFunc(ListaDeFunc *left, ListaDeFunc *right);
 Declaracoes *initDeclaracoes(char *tipo, ListaId *listaId);
 Declaracoes *addDeclaracoes(Declaracoes *left, Declaracoes *right);
-BlocoPrincipal *initBlocoPrincipal(Declaracoes *declaracoes, ListaDeCmd *listaDeCmd);
+BlocoPrincipal *initBlocoPrincipal(Declaracoes *declaracoes, Comando *listaDeCmd);
 Programa *initPrograma(ListaDeFunc *listaDeFunc, BlocoPrincipal *blocoPrincipal);
 ListaId *initListaId(char *id);
 ListaId *addListaId(ListaId *left, char *right);
@@ -171,5 +162,5 @@ Comando *initComando(char *op, Ifstruct *ifstruct, Whilestruct *whilestruct, Atr
 Ifstruct *initIf(char *nodeType, Rel *rel, Bloco *blocoIf, Bloco *blocoElse);
 Whilestruct *initWhile(char *nodeType, Rel *rel, Bloco *blocoWhile);
 Comando *addComando(Comando *left, Comando *right);
-Bloco *initBloco(char *nodeType, ListaDeCmd *listaDeCmd);
+Bloco *initBloco(char *nodeType, Comando *listaDeCmd);
 #endif
