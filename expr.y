@@ -83,7 +83,7 @@ int yylex();
 %type <comando> ListaCmd
 %type <ifStruct> CmdSe
 %type <whilestruct> CmdEnquanto
-$type <bloco> Bloco
+%type <bloco> Bloco
 %%
 
 Linha : Programa {printf("%s", $1->listaDeFunc->tipo);}
