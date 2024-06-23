@@ -16,6 +16,11 @@ typedef struct Expr Expr;
 
 typedef enum Tag {If, While, Atrib, Escrita, Leitura, ChamaFunc} Tag;
 
+typedef struct Bloco {
+    char *nodeType;
+    ListaDeCmd *listaDeCmd;
+} Bloco;
+
 typedef struct Ifstruct {
     char *nodeType;
     Rel *rel;
@@ -92,10 +97,6 @@ typedef struct BlocoPrincipal {
     ListaDeCmd *listaDeCmd;
 } BlocoPrincipal;
 
-typedef struct Bloco {
-    char *nodeType;
-    ListaDeCmd *listaDeCmd;
-} Bloco;
 
 typedef struct Programa {
     char *nodeType;
