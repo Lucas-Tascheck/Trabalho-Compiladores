@@ -148,3 +148,13 @@ Leitura *initLeitura(char *nodeType, char *id){
     leitura->nodeType = nodeType;
     leitura->id = id;
 }
+
+Atrib *initAtrib(char *id, char *id2, Expr *expr){
+    Atrib *atrib = (Atrib*)malloc(sizeof(Atrib));
+    atrib->id = id;
+    if(id2 != ""){
+        atrib->id2 = id2;
+    }
+    atrib->expr = expr;
+    return atrib;
+}

@@ -57,17 +57,18 @@ typedef struct Leitura {
     char *id;
 }Leitura;
 
-typedef struct CmdAtrib {
+typedef struct Atrib {
     char *nodeType;
     char *id;
-
-}CmdAtrib;
+    char *id2;
+    Expr *expr;
+}Atrib;
 
 struct ListaDeCmd {
     char *cmd;
     Ifstruct *ifstruct;
     Whilestruct *whilestruct;
-    CmdAtrib *CmdAtrib;
+    Atrib *atrib;
     ListaDeCmd *prox;
 };
 
@@ -146,5 +147,6 @@ ListaParamChamafunc *addListaParamChamafunc(ListaParamChamafunc *left, char *id,
 ChamaFunc *initChamaFunc(char *id, ListaParamChamafunc *listaParamChamafunc);
 Escrita *initEscrita(char *nodeType, char *id, Expr *expr);
 Leitura *initLeitura(char *nodeType, char *id);
+Atrib *initAtrib(char *id, Expr *expr);
 
 #endif

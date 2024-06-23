@@ -21,6 +21,7 @@ int yylex();
       ChamaFunc *chamaFunc;
       Escrita *escrita;
       Leitura *leitura;
+      Atrib *atrib;
       Expr *expr;
       Rel *rel;
 }
@@ -70,6 +71,7 @@ int yylex();
 %type <chamaFunc> ChamadaProc
 %type <escrita> CmdEscrita
 %type <leitura> CmdLeitura
+%type <atrib> CmdAtrib
 %%
 
 Linha : Programa {printf("%s", $1->listaDeFunc->tipo);}
@@ -179,8 +181,8 @@ CmdSe : IF TAPAR Rel TFPAR Bloco
 CmdEnquanto : WHILE TAPAR Rel TFPAR Bloco
             ;
 
-CmdAtrib : ID EQ Expr SEMICOLON
-         | ID EQ ID SEMICOLON
+CmdAtrib : ID EQ Expr SEMICOLON {$$ = initAtrib($1, "", $3);}
+         | ID EQ ID SEMICOLON {$$ = initAtrib($1, $3, NULL);}
          ;
 
 
