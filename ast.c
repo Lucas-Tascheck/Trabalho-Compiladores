@@ -117,7 +117,7 @@ ListaParamChamafunc *initListaParamChamafunc(char *id, Expr *expr){
 ListaParamChamafunc *addListaParamChamafunc(ListaParamChamafunc *left, char *id, Expr *expr){
     ListaParamChamafunc *p = left;
     ListaParamChamafunc *IdRight;
-    if(id == NULL){
+    if(id == ""){
         IdRight = initListaParamChamafunc(NULL, expr);
     }else{
         IdRight = initListaParamChamafunc(id, NULL);

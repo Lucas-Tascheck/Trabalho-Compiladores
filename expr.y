@@ -71,15 +71,15 @@ int yylex();
 Linha : Programa {printf("%s", $1->listaDeFunc->tipo);}
       ; 
 
-Expr  : Expr TADD Termo
-      | Expr TSUB Termo
-      | Termo
+Expr  : Expr TADD Termo {$$ = initExpr($2, "", NULL, $1, $3);}
+      | Expr TSUB Termo {$$ = initExpr($2, "", NULL, $1, $3);}
+      | Termo {$$ = $1;}
       ;
 
 
-Termo : Termo TMUL Fator
-      | Termo TDIV Fator
-      | Fator
+Termo : Termo TMUL Fator {$$ = initExpr($2, "", NULL, $1, $3);}
+      | Termo TDIV Fator {$$ = initExpr($2, "", NULL, $1, $3);}
+      | Fator {$$ = $1;}
       | ChamaFuncao {$$ = initExpr("", "", $1, NULL, NULL);}
       ;
 
