@@ -168,13 +168,13 @@ ListaCmd : ListaCmd Comando
          | Comando
          ;
 
-Comando : CmdSe {$$ = initComando("If", $1, NULL, NULL, NULL, NULL, NULL, NULL) }
-        | CmdEnquanto {$$ = initComando("While", NULL, $1, NULL, NULL, NULL, NULL, NULL) }
-        | CmdAtrib {$$ = initComando("Atrib", NULL, NULL, $1, NULL, NULL, NULL, NULL) }
-        | CmdEscrita {$$ = initComando("Escrita", NULL, NULL, NULL, $1, NULL, NULL, NULL) }
-        | CmdLeitura {$$ = initComando("Leitura", NULL, NULL, NULL, NULL, $1, NULL, NULL) }
-        | ChamadaProc {$$ = initComando("ChamaFunc", NULL, NULL, NULL, NULL, NULL, $1, NULL) }
-        | Retorno {$$ = initComando("Return", NULL, NULL, NULL, NULL, NULL, NULL, $1) }
+Comando : CmdSe {$$ = initComando("If", $1, NULL, NULL, NULL, NULL, NULL, NULL); }
+        | CmdEnquanto {$$ = initComando("While", NULL, $1, NULL, NULL, NULL, NULL, NULL); }
+        | CmdAtrib {$$ = initComando("Atrib", NULL, NULL, $1, NULL, NULL, NULL, NULL); }
+        | CmdEscrita {$$ = initComando("Escrita", NULL, NULL, NULL, $1, NULL, NULL, NULL); }
+        | CmdLeitura {$$ = initComando("Leitura", NULL, NULL, NULL, NULL, $1, NULL, NULL); }
+        | ChamadaProc {$$ = initComando("ChamaFunc", NULL, NULL, NULL, NULL, NULL, $1, NULL); }
+        | Retorno {$$ = initComando("Return", NULL, NULL, NULL, NULL, NULL, NULL, $1); }
         ;
 
 Retorno : RETURN Expr SEMICOLON {$$ = initReturn("Return", "", $2);}
