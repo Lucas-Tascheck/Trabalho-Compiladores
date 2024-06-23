@@ -79,6 +79,7 @@ int yylex();
 %type <atrib> CmdAtrib
 %type <returnn> Retorno
 %type <comando> Comando
+%type <comando> ListaCmd
 %type <ifStruct> CmdSe
 %type <whilestruct> CmdEnquanto
 %%
@@ -161,11 +162,11 @@ ListaId : ListaId COMMA ID {$$ = addListaId($1, $3);}
         | ID {$$ = initListaId($1);}
         ;
 
-Bloco : LBRACE ListaCmd RBRACE
+Bloco : LBRACE ListaCmd RBRACE {$$ = initBloco("Bloco", $2);}
       ;
 
-ListaCmd : ListaCmd Comando
-         | Comando
+ListaCmd : ListaCmd Comando {$$ = addComando($1, $2);}
+         | Comando {$$ = $1}
          ;
 
 Comando : CmdSe {$$ = initComando("If", $1, NULL, NULL, NULL, NULL, NULL, NULL); }
@@ -183,11 +184,11 @@ Retorno : RETURN Expr SEMICOLON {$$ = initReturn("Return", "", $2);}
         ;
 
 
-CmdSe : IF TAPAR Rel TFPAR Bloco
-      | IF TAPAR Rel TFPAR Bloco ELSE Bloco
+CmdSe : IF TAPAR Rel TFPAR Bloco {$$ = initIf("If", $3, $5, NULL);}
+      | IF TAPAR Rel TFPAR Bloco ELSE Bloco {$$ = initIf("If", $3, $5, $7);}
       ;
 
-CmdEnquanto : WHILE TAPAR Rel TFPAR Bloco
+CmdEnquanto : WHILE TAPAR Rel TFPAR Bloco {$$ = initWhile("While", $3, $5);}
             ;
 
 CmdAtrib : ID EQ Expr SEMICOLON {$$ = initAtrib($1, "", $3);}

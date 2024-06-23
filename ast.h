@@ -12,6 +12,7 @@ typedef struct ListaDeFunc ListaDeFunc;
 typedef struct BlocoPrincipal BlocoPrincipal;
 typedef struct ListaId ListaId;
 typedef struct ListaParamChamafunc ListaParamChamafunc;
+typedef struct Comando Comando;
 typedef struct Rel Rel;
 typedef struct Expr Expr;
 
@@ -21,7 +22,6 @@ typedef struct Bloco {
     char *nodeType;
     ListaDeCmd *listaDeCmd;
 } Bloco;
-
 
 struct ListaParamChamafunc {
     char *id;
@@ -71,7 +71,7 @@ typedef struct Atrib {
     Expr *expr;
 }Atrib;
 
-typedef struct Comando {
+struct Comando {
     char *op;
     Ifstruct *ifstruct;
     Whilestruct *whilestruct;
@@ -80,7 +80,8 @@ typedef struct Comando {
     Leitura *leitura;
     ChamaFunc *chamaFunc;
     Return *returnn;
-}Comando;
+    Comando *prox;
+};
 
 struct ListaDeCmd {
     char *cmd;
@@ -104,7 +105,6 @@ struct Expr {
     Expr *left;
     Expr *right;
 };
-
 
 struct Declaracoes {
     char *nodeType;
@@ -168,5 +168,8 @@ Leitura *initLeitura(char *nodeType, char *id);
 Atrib *initAtrib(char *id, char *id2, Expr *expr);
 Return *initReturn(char *nodeType, char *id, Expr *expr);
 Comando *initComando(char *op, Ifstruct *ifstruct, Whilestruct *whilestruct, Atrib *atrib, Escrita *escrita, Leitura *leitura, ChamaFunc *chamaFunc, Return *returnn);
-
+Ifstruct *initIf(char *nodeType, Rel *rel, Bloco *blocoIf, Bloco *blocoElse);
+Whilestruct *initWhile(char *nodeType, Rel *rel, Bloco *blocoWhile);
+Comando *addComando(Comando *left, Comando *right);
+Bloco *initBloco(char *nodeType, ListaDeCmd *listaDeCmd);
 #endif

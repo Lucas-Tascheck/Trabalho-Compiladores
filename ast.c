@@ -175,5 +175,38 @@ Comando *initComando(char *op, Ifstruct *ifstruct, Whilestruct *whilestruct, Atr
     comando->ifstruct = ifstruct;
     comando->returnn = returnn;
     comando->whilestruct = whilestruct;
+    comando->prox = NULL;
     return comando;
+}
+
+Comando *addComando(Comando *left, Comando *right){
+    Comando *c = left;
+    while(c->prox != NULL){
+        c = c->prox;
+    }
+    c->prox = right;
+    return left;
+}
+
+Ifstruct *initIf(char *nodeType, Rel *rel, Bloco *blocoIf, Bloco *blocoElse){
+    Ifstruct *ifstruct = (Ifstruct*)malloc(sizeof(Ifstruct));
+    ifstruct->nodeType = nodeType;
+    ifstruct->rel = rel;
+    ifstruct->blocoIf = blocoIf;
+    ifstruct->blocoElse = blocoElse;
+    return ifstruct;
+}
+
+Whilestruct *initWhile(char *nodeType, Rel *rel, Bloco *blocoWhile){
+    Whilestruct *whileStruct = (Whilestruct*)malloc(sizeof(Whilestruct));
+    whileStruct->nodeType = nodeType;
+    whileStruct->rel = rel;
+    whileStruct->blocoWhile = blocoWhile;
+}
+
+Bloco *initBloco(char *nodeType, ListaDeCmd *listaDeCmd){
+    Bloco *bloco = (Bloco*)malloc(sizeof(Bloco));
+    bloco->nodeType = nodeType;
+    bloco->listaDeCmd = listaDeCmd;
+    return bloco;
 }
