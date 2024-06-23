@@ -68,20 +68,20 @@ Fator : TNUM
       | TAPAR Expr TFPAR 
       ;
 
-Rel   : Rel TAND OpLog
-	  | Rel TOR OpLog
-	  | OpLog
+Rel   : Rel TAND OpLog {$$ = initRel($2, NULL, $1, $3);}
+	  | Rel TOR OpLog {$$ = initRel($2, NULL, $1, $3);}
+	  | OpLog {$$ = $1;}
       ;
 
-OpLog : FatorLog TMORE FatorLog
-      | FatorLog TLESS FatorLog
-      | FatorLog TEQUAL FatorLog
-      | FatorLog TDIFF FatorLog
-      | FatorLog
+OpLog : FatorLog TMORE FatorLog {$$ = initRel($2, NULL, $1, $3);}
+      | FatorLog TLESS FatorLog {$$ = initRel($2, NULL, $1, $3);} 
+      | FatorLog TEQUAL FatorLog {$$ = initRel($2, NULL, $1, $3);}
+      | FatorLog TDIFF FatorLog {$$ = initRel($2, NULL, $1, $3);}
+      | FatorLog {$$ = $1;}
       ;
 
-FatorLog: TNUM
-        | ID
+FatorLog: TNUM {$$ = initRel(NULL, $1, NULL, NULL);}
+        | ID {$$ = initRel(NULL, $1, NULL, NULL);}
 
 Programa : ListaFuncoes BlocoPrincipal {$$ = initPrograma($1, $2);}
          | BlocoPrincipal {$$ = initPrograma(NULL, $1);}

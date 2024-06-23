@@ -47,6 +47,7 @@ typedef union Union {
 
 struct Rel {
     char *op;
+    char *value;
     Rel *left;
     Rel *right;
 };
@@ -115,5 +116,6 @@ BlocoPrincipal *initBlocoPrincipal(Declaracoes *declaracoes, ListaDeCmd *listaDe
 Programa *initPrograma(ListaDeFunc *listaDeFunc, BlocoPrincipal *blocoPrincipal);
 ListaId *initListaId(char *id);
 ListaId *addListaId(ListaId *left, char *right);
+Rel *initRel(char *op, char *value, Rel *left, Rel *right);
 
 #endif

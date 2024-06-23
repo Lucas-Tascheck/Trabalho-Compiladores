@@ -86,3 +86,12 @@ ListaId *addListaId(ListaId *left, char *right){
     p->prox = IdRight;
     return left;
 }
+
+Rel *initRel(char *op, char *value, Rel *left, Rel *right){
+    Rel *rel = (Rel*)malloc(sizeof(Rel));
+    rel->op = op;
+    rel->value = value;
+    rel->left = left;
+    rel->right = right;
+    return rel;
+}
