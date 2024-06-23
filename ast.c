@@ -95,3 +95,42 @@ Rel *initRel(char *op, char *value, Rel *left, Rel *right){
     rel->right = right;
     return rel;
 }
+
+Expr *initExpr(char *op, char *value, Expr *left, Expr *right){
+    Expr *expr = (Expr*)malloc(sizeof(Expr));
+    expr->op = op;
+    expr->value = value;
+    expr->left = left;
+    expr->right = right;
+    return expr;
+}
+
+ListaParamChamafunc *initListaParamChamafunc(char *id, Expr *expr){
+    ListaParamChamafunc *listaParamChamafunc = (ListaParamChamafunc*)malloc(sizeof(ListaParamChamafunc));
+    listaParamChamafunc->id = id;
+    listaParamChamafunc->expr = expr;
+    listaParamChamafunc->prox = NULL;
+    return listaParamChamafunc;
+}
+
+ListaParamChamafunc *addListaParamChamafunc(ListaParamChamafunc *left, char *id, Expr *expr){
+    ListaParamChamafunc *p = left;
+    ListaParamChamafunc *IdRight;
+    if(id == NULL){
+        IdRight = initListaParamChamafunc(NULL, expr);
+    }else{
+        IdRight = initListaParamChamafunc(id, NULL);
+    }
+    while(p->prox != NULL){
+        p = p->prox;
+    }
+    p->prox = IdRight;
+    return left;
+}
+
+ChamaFunc *initChamaFunc(char *id, ListaParamChamafunc *listaParamChamafunc){
+    ChamaFunc *chamaFunc = (ChamaFunc*)malloc(sizeof(ChamaFunc));
+    chamaFunc->id = id;
+    chamaFunc->listaParamChamafunc = listaParamChamafunc;
+    return chamaFunc;
+}

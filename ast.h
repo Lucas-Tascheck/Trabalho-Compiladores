@@ -11,6 +11,7 @@ typedef struct ListaParam ListaParam;
 typedef struct ListaDeFunc ListaDeFunc;
 typedef struct BlocoPrincipal BlocoPrincipal;
 typedef struct ListaId ListaId;
+typedef struct ListaParamChamafunc ListaParamChamafunc;
 typedef struct Rel Rel;
 typedef struct Expr Expr;
 
@@ -20,6 +21,17 @@ typedef struct Bloco {
     char *nodeType;
     ListaDeCmd *listaDeCmd;
 } Bloco;
+
+struct ListaParamChamafunc {
+    char *id;
+    Expr *expr;
+    ListaParamChamafunc *prox;
+};
+
+typedef struct ChamaFunc {
+    char *id;
+    ListaParamChamafunc *listaParamChamafunc;
+}ChamaFunc;
 
 typedef struct Ifstruct {
     char *nodeType;
@@ -54,6 +66,7 @@ struct Rel {
 
 struct Expr {
     char *op;
+    char *value;
     Expr *left;
     Expr *right;
 };
@@ -117,5 +130,9 @@ Programa *initPrograma(ListaDeFunc *listaDeFunc, BlocoPrincipal *blocoPrincipal)
 ListaId *initListaId(char *id);
 ListaId *addListaId(ListaId *left, char *right);
 Rel *initRel(char *op, char *value, Rel *left, Rel *right);
+Expr *initExpr(char *op, char *value, Expr *left, Expr *right);
+ListaParamChamafunc *initListaParamChamafunc(char *id, Expr *expr);
+ListaParamChamafunc *addListaParamChamafunc(ListaParamChamafunc *left, char *id, Expr *expr);
+ChamaFunc *initChamaFunc(char *id, ListaParamChamafunc *listaParamChamafunc);
 
 #endif

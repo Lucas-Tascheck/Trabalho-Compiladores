@@ -17,6 +17,8 @@ int yylex();
       ListaDeCmd *listaDeCmd;
       BlocoPrincipal *blocoPrincipal;
       ListaId *listaId;
+      ListaParamChamafunc *listaParamChamafunc;
+      ChamaFunc *chamaFunc;
       Expr *expr;
       Rel *rel;
 }
@@ -61,6 +63,9 @@ int yylex();
 %type <rel> OpLog
 %type <rel> FatorLog
 %type <listaId> ListaId
+%type <listaParamChamafunc> ListaParametros
+%type <chamaFunc> ChamaFunc
+%type <chamaFunc> ChamadaProc
 %%
 
 Linha : Programa {printf("%s", $1->listaDeFunc->tipo);}
@@ -75,11 +80,11 @@ Expr  : Expr TADD Termo
 Termo : Termo TMUL Fator
       | Termo TDIV Fator
       | Fator
-      | ChamaFuncao
+      | ChamaFuncao {$$ = initExpr(NULL, $1, NULL, NULL);}
       ;
 
-Fator : TNUM 
-      | TAPAR Expr TFPAR 
+Fator : TNUM {$$ = initExpr(NULL, $1, NULL, NULL);}
+      | TAPAR Expr TFPAR {$$ = $2;}
       ;
 
 Rel   : Rel TAND OpLog {$$ = initRel($2, NULL, $1, $3);}
@@ -182,15 +187,15 @@ CmdEscrita : PRINT TAPAR Expr TFPAR SEMICOLON
 CmdLeitura : READ TAPAR ID TFPAR SEMICOLON
            ;
 
-ChamadaProc : ChamaFuncao SEMICOLON
+ChamadaProc : ChamaFuncao SEMICOLON {$$ = $1;}
             ;
-ChamaFuncao : ID TAPAR ListaParametros TFPAR
-            | ID TAPAR TFPAR
+ChamaFuncao : ID TAPAR ListaParametros TFPAR {$$ = initChamaFunc($1, $3);}
+            | ID TAPAR TFPAR {$$ = initChamaFunc($1, NULL);}
             ;
-ListaParametros : ListaParametros COMMA Expr
-                | ListaParametros COMMA ID
-                | Expr
-                | ID
+ListaParametros : ListaParametros COMMA Expr {$$ = addListaParamChamafunc($1, NULL, $3);}
+                | ListaParametros COMMA ID {$$ = addListaParamChamafunc($1, $3, NULL);}
+                | Expr {$$ = initListaParamChamafunc(NULL, $1);}
+                | ID {$$ = initListaParamChamafunc($1, NULL);}
                 ;
 %%
 
