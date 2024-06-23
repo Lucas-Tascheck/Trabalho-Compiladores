@@ -47,10 +47,10 @@ ListaDeFunc *createFunc(ListaDeFunc *left, ListaDeFunc *right){
     return left;
 }
 
-Declaracoes *initDeclaracoes(char *tipo, ListaID *listaID){
+Declaracoes *initDeclaracoes(char *tipo, ListaId *listaId){
     Declaracoes *declaracao = (Declaracoes*)malloc(sizeof(Declaracoes));
     declaracao->tipo = tipo;
-    declaracao->listaID = listaID;
+    declaracao->listaId = listaId;
     declaracao->prox = NULL;
     return declaracao;
 }
@@ -78,15 +78,15 @@ Programa *initPrograma(ListaDeFunc *listaDeFunc, BlocoPrincipal *blocoPrincipal)
     return programa;
 }
 
-ListaID *initListaID(char *id){
-    ListaID *listaID = (ListaID*)malloc(sizeof(ListaID));
-    listaID->nodetype = "ListaID";
-    listaID->id = id;
-    listaID->prox = NULL;
+ListaId *initListaId(char *id){
+    ListaId *listaId = (ListaId*)malloc(sizeof(ListaId));
+    listaId->nodetype = "ListaId";
+    listaId->id = id;
+    listaId->prox = NULL;
 }
 
-ListaID *addListaID(ListaID *left, ListaID *right){
-    ListaID *p = left;
+ListaId *addListaId(ListaId *left, ListaId *right){
+    ListaId *p = left;
     while(p->prox != NULL){
         p = p->prox;
     }

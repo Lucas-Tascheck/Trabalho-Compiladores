@@ -130,8 +130,8 @@ Tipo : INT {$$ = "int";}
      ;
 
 
-ListaId : ListaId COMMA ID {$$ = addListaID($1, $3);}
-        | ID {$$ = initListaID($1);}
+ListaId : ListaId COMMA ID {$$ = addListaId($1, $3);}
+        | ID {$$ = initListaId($1);}
         ;
 
 Bloco : LBRACE ListaCmd RBRACE
