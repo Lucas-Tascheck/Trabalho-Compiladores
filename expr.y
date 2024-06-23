@@ -85,7 +85,7 @@ int yylex();
 %type <bloco> Bloco
 %%
 
-Linha : Programa {printf("%s", $1->listaDeFunc->tipo);}
+Linha : Programa {}
       ; 
 
 Expr  : Expr TADD Termo {$$ = initExpr($2, "", NULL, $1, $3);}
@@ -101,6 +101,7 @@ Termo : Termo TMUL Fator {$$ = initExpr($2, "", NULL, $1, $3);}
       ;
 
 Fator : TNUM {$$ = initExpr("", $1, NULL, NULL, NULL);}
+      | ID {$$ = initExpr("", $1, NULL, NULL, NULL);}
       | TAPAR Expr TFPAR {$$ = $2;}
       ;
 
