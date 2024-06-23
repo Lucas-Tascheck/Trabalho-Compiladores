@@ -142,3 +142,9 @@ Escrita *initEscrita(char *nodeType, char *id, Expr *expr){
     escrita->id = id;
     escrita->expr = expr;
 }
+
+Leitura *initLeitura(char *nodeType, char *id){
+    Leitura *leitura = (Leitura*)malloc(sizeof(Leitura));
+    leitura->nodeType = nodeType;
+    leitura->id = id;
+}

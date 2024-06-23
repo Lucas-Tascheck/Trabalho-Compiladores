@@ -52,6 +52,11 @@ typedef struct Escrita {
     Expr *expr;
 }Escrita;
 
+typedef struct Leitura {
+    char *nodeType;
+    char *id;
+}Leitura;
+
 typedef struct CmdAtrib {
     char *nodeType;
     char *id;
@@ -140,5 +145,6 @@ ListaParamChamafunc *initListaParamChamafunc(char *id, Expr *expr);
 ListaParamChamafunc *addListaParamChamafunc(ListaParamChamafunc *left, char *id, Expr *expr);
 ChamaFunc *initChamaFunc(char *id, ListaParamChamafunc *listaParamChamafunc);
 Escrita *initEscrita(char *nodeType, char *id, Expr *expr);
+Leitura *initLeitura(char *nodeType, char *id);
 
 #endif

@@ -20,6 +20,7 @@ int yylex();
       ListaParamChamafunc *listaParamChamafunc;
       ChamaFunc *chamaFunc;
       Escrita *escrita;
+      Leitura *leitura;
       Expr *expr;
       Rel *rel;
 }
@@ -68,6 +69,7 @@ int yylex();
 %type <chamaFunc> ChamaFuncao
 %type <chamaFunc> ChamadaProc
 %type <escrita> CmdEscrita
+%type <leitura> CmdLeitura
 %%
 
 Linha : Programa {printf("%s", $1->listaDeFunc->tipo);}
@@ -186,7 +188,7 @@ CmdEscrita : PRINT TAPAR Expr TFPAR SEMICOLON {$$ = initEscrita("Escrita", "", $
            | PRINT TAPAR ID TFPAR SEMICOLON {$$ = initEscrita("Escrita", $3, NULL);}
            ;
 
-CmdLeitura : READ TAPAR ID TFPAR SEMICOLON
+CmdLeitura : READ TAPAR ID TFPAR SEMICOLON {$$ = initLeitura("Leitura", $3);}
            ;
 
 ChamadaProc : ChamaFuncao SEMICOLON {$$ = $1;}
