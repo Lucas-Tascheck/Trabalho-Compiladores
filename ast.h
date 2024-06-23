@@ -28,7 +28,7 @@ struct ListaParamChamafunc {
     ListaParamChamafunc *prox;
 };
 
-struct ChamaFunc {
+typedef struct ChamaFunc {
     char *id;
     ListaParamChamafunc *listaParamChamafunc;
 }ChamaFunc;
