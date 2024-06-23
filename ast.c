@@ -211,6 +211,10 @@ Bloco *initBloco(char *nodeType, Comando *listaDeCmd){
     return bloco;
 }
 
+void imprimeBloco(Bloco *bloco){
+
+}
+
 void imprimeArvore(Programa *raiz){
     ListaDeFunc *listaDeFunc = raiz->listaDeFunc;
     ListaParam *listaDeParam;
@@ -222,7 +226,20 @@ void imprimeArvore(Programa *raiz){
             listaDeParam = listaDeParam->prox;
         }
         printf("%s %s){\n", listaDeParam->tipo, listaDeParam->id);
-        listaDeFunc = listaDeFunc->prox;
 
+        BlocoPrincipal *blocoPrincipal = listaDeFunc->blocoPrincipal;
+        Declaracoes *declaracoes = blocoPrincipal->listaDeDeclaracoes;
+        while(declaracoes != NULL){
+            ListaId *listaId = declaracoes->listaId;
+            printf("\t%s ", declaracoes->tipo);
+            while(listaId->prox != NULL){
+                printf("%s, ", listaId->id);
+                listaId = listaId->prox;
+            }
+            printf("%s;\n", listaId->id);
+            declaracoes = declaracoes->prox;
+        }
+
+        listaDeFunc = listaDeFunc->prox;
     }
 }
