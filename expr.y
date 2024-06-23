@@ -64,7 +64,7 @@ int yylex();
 %type <rel> FatorLog
 %type <listaId> ListaId
 %type <listaParamChamafunc> ListaParametros
-%type <chamaFunc> ChamaFunc
+%type <chamaFunc> ChamaFuncao
 %type <chamaFunc> ChamadaProc
 %%
 
