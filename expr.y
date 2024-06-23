@@ -67,7 +67,7 @@ int yylex();
 %type <listaParamChamafunc> ListaParametros
 %type <chamaFunc> ChamaFuncao
 %type <chamaFunc> ChamadaProc
-%type <escrita> Escrita
+%type <escrita> CmdEscrita
 %%
 
 Linha : Programa {printf("%s", $1->listaDeFunc->tipo);}
