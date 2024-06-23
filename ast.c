@@ -96,10 +96,11 @@ Rel *initRel(char *op, char *value, Rel *left, Rel *right){
     return rel;
 }
 
-Expr *initExpr(char *op, char *value, Expr *left, Expr *right){
+Expr *initExpr(char *op, char *value, ChamaFunc *chamaFunc, Expr *left, Expr *right){
     Expr *expr = (Expr*)malloc(sizeof(Expr));
     expr->op = op;
     expr->value = value;
+    expr->chamafunc = chamaFunc;
     expr->left = left;
     expr->right = right;
     return expr;

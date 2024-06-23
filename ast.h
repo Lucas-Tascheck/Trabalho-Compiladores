@@ -67,6 +67,7 @@ struct Rel {
 struct Expr {
     char *op;
     char *value;
+    ChamaFunc *chamafunc;
     Expr *left;
     Expr *right;
 };
@@ -130,7 +131,7 @@ Programa *initPrograma(ListaDeFunc *listaDeFunc, BlocoPrincipal *blocoPrincipal)
 ListaId *initListaId(char *id);
 ListaId *addListaId(ListaId *left, char *right);
 Rel *initRel(char *op, char *value, Rel *left, Rel *right);
-Expr *initExpr(char *op, char *value, Expr *left, Expr *right);
+Expr *initExpr(char *op, char *value, ChamaFunc *chamaFunc, Expr *left, Expr *right);
 ListaParamChamafunc *initListaParamChamafunc(char *id, Expr *expr);
 ListaParamChamafunc *addListaParamChamafunc(ListaParamChamafunc *left, char *id, Expr *expr);
 ChamaFunc *initChamaFunc(char *id, ListaParamChamafunc *listaParamChamafunc);

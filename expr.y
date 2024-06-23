@@ -80,10 +80,10 @@ Expr  : Expr TADD Termo
 Termo : Termo TMUL Fator
       | Termo TDIV Fator
       | Fator
-      | ChamaFuncao {$$ = initExpr("", $1, NULL, NULL);}
+      | ChamaFuncao {$$ = initExpr("", "", $1, NULL, NULL);}
       ;
 
-Fator : TNUM {$$ = initExpr("", $1, NULL, NULL);}
+Fator : TNUM {$$ = initExpr("", $1, NULL, NULL, NULL);}
       | TAPAR Expr TFPAR {$$ = $2;}
       ;
 
