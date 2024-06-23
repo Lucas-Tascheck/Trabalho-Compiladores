@@ -14,7 +14,6 @@ int yylex();
       ListaDeFunc *listaDeFunc;
       ListaParam *listaParam;
       Declaracoes *declaracoes;
-      ListaDeCmd *listaDeCmd;
       BlocoPrincipal *blocoPrincipal;
       ListaId *listaId;
       ListaParamChamafunc *listaParamChamafunc;
