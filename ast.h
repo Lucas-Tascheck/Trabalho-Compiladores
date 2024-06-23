@@ -163,4 +163,5 @@ Ifstruct *initIf(char *nodeType, Rel *rel, Bloco *blocoIf, Bloco *blocoElse);
 Whilestruct *initWhile(char *nodeType, Rel *rel, Bloco *blocoWhile);
 Comando *addComando(Comando *left, Comando *right);
 Bloco *initBloco(char *nodeType, Comando *listaDeCmd);
+void imprimeArvore(Programa *raiz);
 #endif

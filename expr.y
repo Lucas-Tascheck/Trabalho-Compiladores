@@ -85,7 +85,7 @@ int yylex();
 %type <bloco> Bloco
 %%
 
-Linha : Programa {}
+Linha : Programa {imprimeArvore($1);}
       ; 
 
 Expr  : Expr TADD Termo {$$ = initExpr($2, "", NULL, $1, $3);}
