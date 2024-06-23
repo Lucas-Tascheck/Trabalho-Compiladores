@@ -12,6 +12,7 @@ typedef struct Declaracoes Declaracoes;
 typedef struct ListaParam ListaParam;
 typedef struct ListaDeFunc ListaDeFunc;
 typedef struct BlocoPrincipal BlocoPrincipal;
+typedef struct ListaID ListaID;
 
 typedef enum Tag {If, While, Atrib, Escrita, Leitura, ChamaFunc} Tag;
 
@@ -42,7 +43,7 @@ struct ListaDeCmd {
 struct Declaracoes {
     char *nodeType;
     char *tipo;
-    char *id;
+    ListaID *listaID;
     Declaracoes *prox;
 };
 
@@ -59,6 +60,12 @@ struct ListaDeFunc {
     ListaParam *listaParam;
     BlocoPrincipal *blocoPrincipal;
     ListaDeFunc *prox;
+};
+
+struct ListaID {
+    char *nodetype;
+    char *id;
+    ListaID *prox;
 };
 
 typedef struct BlocoPrincipal {
@@ -79,9 +86,11 @@ Programa *addListaDeFunc(ListaDeFunc *nodo);
 ListaParam *createParam(ListaParam *left, ListaParam *right);
 ListaDeFunc *initListaDeFunc(char *nodetype, char *tipo, char *id, ListaParam *lista, BlocoPrincipal *blocoPrincipal);
 ListaDeFunc *createFunc(ListaDeFunc *left, ListaDeFunc *right);
-Declaracoes *initDeclaracoes(char *tipo, char *id);
+Declaracoes *initDeclaracoes(char *tipo, ListaID *listaID);
 Declaracoes *addDeclaracoes(Declaracoes *left, Declaracoes *right);
 BlocoPrincipal *initBlocoPrincipal(Declaracoes *declaracoes, ListaDeCmd *listaDeCmd);
 Programa *initPrograma(ListaDeFunc *listaDeFunc, BlocoPrincipal *blocoPrincipal);
+ListaID *initListaID(char *id);
+ListaID *addListaID(ListaID *left, ListaID *right);
 
 #endif

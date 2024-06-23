@@ -9,12 +9,14 @@ int yylex();
 %code requires {#include "ast.h"}
 
 %union {
+      char *str;
       Programa *programa;
       ListaDeFunc *listaDeFunc;
       ListaParam *listaParam;
       Declaracoes *declaracoes;
       ListaDeCmd *listaDeCmd;
       BlocoPrincipal *blocoPrincipal;
+      ListaId *listaId;
 }
 
 %define parse.error verbose
@@ -32,6 +34,13 @@ int yylex();
 %type <blocoPrincipal> BlocoPrincipal
 %type <declaracoes> Declaracao
 %type <declaracoes> Declaracoes
+%type <str> TipoRetorno
+%type <str> Tipo
+%type <str> ID 
+%type <listaId> ListaId
+%type <str> 
+%type <str> 
+%type <str> 
 %%
 
 Linha : Programa {printf("%s", $1->listaDeFunc->tipo);}
@@ -124,8 +133,8 @@ Tipo : INT {$$ = "int";}
      ;
 
 
-ListaId : ListaId COMMA ID
-        | ID
+ListaId : ListaId COMMA ID {$$ = addListaID($1, $3);}
+        | ID {$$ = initListaID($1);}
         ;
 
 Bloco : LBRACE ListaCmd RBRACE
