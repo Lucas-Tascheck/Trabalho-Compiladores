@@ -15,7 +15,7 @@ typedef struct ListaParamChamafunc ListaParamChamafunc;
 typedef struct Rel Rel;
 typedef struct Expr Expr;
 
-typedef enum Tag {If, While, Atrib, Escrita, Leitura, ChamaFunc} Tag;
+typedef enum Tag {If, While, Atrib, Escrita, Leitura} Tag;
 
 typedef struct Bloco {
     char *nodeType;
@@ -31,7 +31,7 @@ struct ListaParamChamafunc {
 struct ChamaFunc {
     char *id;
     ListaParamChamafunc *listaParamChamafunc;
-};
+}ChamaFunc;
 
 typedef struct Ifstruct {
     char *nodeType;
