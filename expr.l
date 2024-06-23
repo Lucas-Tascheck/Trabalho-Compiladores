@@ -48,7 +48,6 @@ id	[a-zA-Z][a-zA-Z0-9]*
 ","     {return COMMA;}
 "{"     {return LBRACE;}
 "}"     {return RBRACE;}
-\n      {return TFIM;}
 
 {num}   {yylval = strdup(yytext); return TNUM;}
 {id}    {yylval = strdup(yytext); return ID;}
