@@ -15,7 +15,7 @@ typedef struct ListaParamChamafunc ListaParamChamafunc;
 typedef struct Rel Rel;
 typedef struct Expr Expr;
 
-typedef enum Tag {If, While, Atrib, Escrita, Leitura} Tag;
+//typedef enum Tag {If, While, Atrib, Escrita, Leitura} Tag;
 
 typedef struct Bloco {
     char *nodeType;
@@ -46,16 +46,25 @@ typedef struct Whilestruct {
     Bloco *blocoWhile;
 }Whilestruct;
 
+typedef struct Escrita {
+    char *nodeType;
+    char *id;
+    Expr *expr;
+}Escrita;
+
 typedef struct CmdAtrib {
     char *nodeType;
     char *id;
 
 }CmdAtrib;
 
-typedef union Union {
-  Ifstruct *If;
-  Whilestruct *While;
-} Union;
+struct ListaDeCmd {
+    char *cmd;
+    Ifstruct *ifstruct;
+    Whilestruct *whilestruct;
+    CmdAtrib *CmdAtrib;
+    ListaDeCmd *prox;
+};
 
 struct Rel {
     char *op;
@@ -72,11 +81,6 @@ struct Expr {
     Expr *right;
 };
 
-struct ListaDeCmd {
-    Tag tag;
-    Union value;
-    ListaDeCmd *prox;
-};
 
 struct Declaracoes {
     char *nodeType;
@@ -135,5 +139,6 @@ Expr *initExpr(char *op, char *value, ChamaFunc *chamaFunc, Expr *left, Expr *ri
 ListaParamChamafunc *initListaParamChamafunc(char *id, Expr *expr);
 ListaParamChamafunc *addListaParamChamafunc(ListaParamChamafunc *left, char *id, Expr *expr);
 ChamaFunc *initChamaFunc(char *id, ListaParamChamafunc *listaParamChamafunc);
+Escrita *initEscrita(char *nodeType, char *id, Expr *expr);
 
 #endif

@@ -135,3 +135,10 @@ ChamaFunc *initChamaFunc(char *id, ListaParamChamafunc *listaParamChamafunc){
     chamaFunc->listaParamChamafunc = listaParamChamafunc;
     return chamaFunc;
 }
+
+Escrita *initEscrita(char *nodeType, char *id, Expr *expr){
+    Escrita *escrita = (Escrita*)malloc(sizeof(Escrita));
+    escrita->nodeType = nodeType;
+    escrita->id = id;
+    escrita->expr = expr;
+}
