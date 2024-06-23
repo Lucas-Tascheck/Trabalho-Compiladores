@@ -211,9 +211,7 @@ ChamaFuncao : ID TAPAR ListaParametros TFPAR {$$ = initChamaFunc($1, $3);}
             | ID TAPAR TFPAR {$$ = initChamaFunc($1, NULL);}
             ;
 ListaParametros : ListaParametros COMMA Expr {$$ = addListaParamChamafunc($1, NULL, $3);}
-                | ListaParametros COMMA ID {$$ = addListaParamChamafunc($1, $3, NULL);}
                 | Expr {$$ = initListaParamChamafunc(NULL, $1);}
-                | ID {$$ = initListaParamChamafunc($1, NULL);}
                 ;
 %%
 
