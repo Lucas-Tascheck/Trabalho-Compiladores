@@ -28,10 +28,10 @@ struct ListaParamChamafunc {
     ListaParamChamafunc *prox;
 };
 
-typedef struct ChamaFunc {
+struct ChamaFunc {
     char *id;
     ListaParamChamafunc *listaParamChamafunc;
-}ChamaFunc;
+};
 
 typedef struct Ifstruct {
     char *nodeType;
