@@ -2,3 +2,6 @@ float fat(int b, int a, float k, string a)
 {
 	return;
 }
+{
+	return 1+1;
+}
