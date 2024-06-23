@@ -23,6 +23,7 @@ int yylex();
       Leitura *leitura;
       Atrib *atrib;
       Return *returnn;
+      Comando *comando;
       Expr *expr;
       Rel *rel;
 }
@@ -74,6 +75,7 @@ int yylex();
 %type <leitura> CmdLeitura
 %type <atrib> CmdAtrib
 %type <returnn> Retorno
+%type <comando> Comando
 %%
 
 Linha : Programa {printf("%s", $1->listaDeFunc->tipo);}
@@ -161,15 +163,15 @@ ListaCmd : ListaCmd Comando
          | Comando
          ;
 
-Comando : CmdSe
-        | CmdEnquanto
-        | CmdAtrib
-        | CmdEscrita
-        | CmdLeitura
-        | ChamadaProc
-        | Retorno
+Comando : CmdSe {$$ = initComando("If", $1, NULL, NULL, NULL, NULL, NULL, NULL) }
+        | CmdEnquanto {$$ = initComando("While", NULL, $1, NULL, NULL, NULL, NULL, NULL) }
+        | CmdAtrib {$$ = initComando("Atrib", NULL, NULL, $1, NULL, NULL, NULL, NULL) }
+        | CmdEscrita {$$ = initComando("Escrita", NULL, NULL, NULL, $1, NULL, NULL, NULL) }
+        | CmdLeitura {$$ = initComando("Leitura", NULL, NULL, NULL, NULL, $1, NULL, NULL) }
+        | ChamadaProc {$$ = initComando("ChamaFunc", NULL, NULL, NULL, NULL, NULL, $1, NULL) }
+        | Retorno {$$ = initComando("Return", NULL, NULL, NULL, NULL, NULL, NULL, $1) }
         ;
-
+        
 Retorno : RETURN Expr SEMICOLON {$$ = initReturn("Return", "", $2);}
         | RETURN ID SEMICOLON {$$ = initReturn("Return", $2, NULL);}
         | RETURN SEMICOLON {$$ = initReturn("Return", "", NULL);}

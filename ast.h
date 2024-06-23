@@ -22,6 +22,17 @@ typedef struct Bloco {
     ListaDeCmd *listaDeCmd;
 } Bloco;
 
+typedef struct Comando {
+    char *op;
+    Ifstruct *ifstruct;
+    Whilestruct *whilestruct;
+    Atrib *atrib;
+    Escrita *escrita;
+    Leitura *leitura;
+    ChamaFunc *chamaFunc;
+    Return *returnn;
+}Comando;
+
 struct ListaParamChamafunc {
     char *id;
     Expr *expr;
@@ -155,5 +166,6 @@ Escrita *initEscrita(char *nodeType, char *id, Expr *expr);
 Leitura *initLeitura(char *nodeType, char *id);
 Atrib *initAtrib(char *id, char *id2, Expr *expr);
 Return *initReturn(char *nodeType, char *id, Expr *expr);
+Comando *initComando(char *op, Ifstruct *ifstruct, Whilestruct *whilestruct, Atrib *atrib, Escrita *escrita, Leitura *leitura, ChamaFunc *chamaFunc, Return *returnn);
 
 #endif

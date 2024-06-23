@@ -165,3 +165,15 @@ Return *initReturn(char *nodeType, char *id, Expr *expr){
     returnn->id = id;
     returnn->expr = expr;
 }
+
+Comando *initComando(char *op, Ifstruct *ifstruct, Whilestruct *whilestruct, Atrib *atrib, Escrita *escrita, Leitura *leitura, ChamaFunc *chamaFunc, Return *returnn){
+    Comando *comando = (Comando*)malloc(sizeof(Comando));
+    comando->atrib = atrib;
+    comando->chamaFunc = chamaFunc;
+    comando->escrita = escrita;
+    comando->leitura = leitura;
+    comando->ifstruct = ifstruct;
+    comando->returnn = returnn;
+    comando->whilestruct = whilestruct;
+    return comando;
+}
