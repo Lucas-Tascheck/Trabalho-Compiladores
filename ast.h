@@ -80,9 +80,8 @@ typedef struct Programa {
     BlocoPrincipal *blocoPrincipal;
 } Programa;
 
-Programa *initPrograma();
+Programa *initPrograma(ListaDeFunc *listaDeFunc, BlocoPrincipal *blocoPrincipal);
 ListaParam *initParam(char *tipo, char *id);
-Programa *addListaDeFunc(ListaDeFunc *nodo);
 ListaParam *createParam(ListaParam *left, ListaParam *right);
 ListaDeFunc *initListaDeFunc(char *nodetype, char *tipo, char *id, ListaParam *lista, BlocoPrincipal *blocoPrincipal);
 ListaDeFunc *createFunc(ListaDeFunc *left, ListaDeFunc *right);
@@ -91,6 +90,6 @@ Declaracoes *addDeclaracoes(Declaracoes *left, Declaracoes *right);
 BlocoPrincipal *initBlocoPrincipal(Declaracoes *declaracoes, ListaDeCmd *listaDeCmd);
 Programa *initPrograma(ListaDeFunc *listaDeFunc, BlocoPrincipal *blocoPrincipal);
 ListaId *initListaId(char *id);
-ListaId *addListaId(ListaId *left, ListaId *right);
+ListaId *addListaId(ListaId *left, char *right);
 
 #endif

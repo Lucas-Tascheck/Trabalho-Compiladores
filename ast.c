@@ -1,7 +1,6 @@
 #include "ast.h"
 #include <stdio.h>
 #include <stdlib.h>
-
 Programa *initPrograma(){
     Programa *p = (Programa*)malloc(sizeof(Programa));
     p->blocoPrincipal = NULL;
@@ -85,11 +84,12 @@ ListaId *initListaId(char *id){
     listaId->prox = NULL;
 }
 
-ListaId *addListaId(ListaId *left, ListaId *right){
+ListaId *addListaId(ListaId *left, char *right){
     ListaId *p = left;
+    ListaId *IdRight = initListaId(right);
     while(p->prox != NULL){
         p = p->prox;
     }
-    p->prox = right;
+    p->prox = IdRight;
     return left;
 }
