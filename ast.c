@@ -1,13 +1,6 @@
 #include "ast.h"
 #include <stdio.h>
 #include <stdlib.h>
-Programa *initPrograma(){
-    Programa *p = (Programa*)malloc(sizeof(Programa));
-    p->blocoPrincipal = NULL;
-    p->listaDeFunc = NULL;
-    p->nodeType = "Programa";
-    return p;
-}
 
 ListaParam *initParam(char *tipo, char *id){
     ListaParam *l = (ListaParam*)malloc(sizeof(ListaParam));
