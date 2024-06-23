@@ -210,3 +210,19 @@ Bloco *initBloco(char *nodeType, Comando *listaDeCmd){
     bloco->listaDeCmd = listaDeCmd;
     return bloco;
 }
+
+void imprimeArvore(Programa *raiz){
+    ListaDeFunc *listaDeFunc = raiz->listaDeFunc;
+    ListaParam *listaDeParam;
+    while(listaDeFunc != NULL){
+        printf("%s %s (", listaDeFunc->tipo, listaDeFunc->id);
+        listaDeParam = listaDeFunc->listaParam;
+        while(listaDeParam->prox != NULL){
+            printf("%s %s, ", listaDeParam->tipo, listaDeParam->id);
+            listaDeParam = listaDeParam->prox;
+        }
+        printf("%s %s){\n", listaDeParam->tipo, listaDeParam->id);
+
+
+    }
+}
