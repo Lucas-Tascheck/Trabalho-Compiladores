@@ -50,7 +50,7 @@ struct Expr {
     char *op;
     Expr *left;
     Expr *right;
-}
+};
 
 struct ListaDeCmd {
     Tag tag;

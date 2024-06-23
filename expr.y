@@ -64,12 +64,6 @@ Fator : TNUM
       | TAPAR Expr TFPAR 
       ;
 
-Termo2 : Termo2 TMUL Fator2
-      | Termo2 TDIV Fator2 
-      | Fator2
-      | ChamaFuncao
-      ;
-
 Rel   : Rel TAND OpLog
 	  | Rel TOR OpLog
 	  | OpLog
