@@ -22,6 +22,7 @@ int yylex();
       Escrita *escrita;
       Leitura *leitura;
       Atrib *atrib;
+      Return *returnn;
       Expr *expr;
       Rel *rel;
 }
@@ -72,6 +73,7 @@ int yylex();
 %type <escrita> CmdEscrita
 %type <leitura> CmdLeitura
 %type <atrib> CmdAtrib
+%type <returnn> Retorno
 %%
 
 Linha : Programa {printf("%s", $1->listaDeFunc->tipo);}
@@ -168,9 +170,9 @@ Comando : CmdSe
         | Retorno
         ;
 
-Retorno : RETURN Expr SEMICOLON
-        | RETURN ID SEMICOLON
-        | RETURN SEMICOLON
+Retorno : RETURN Expr SEMICOLON {$$ = initReturn("Return", "", $2);}
+        | RETURN ID SEMICOLON {$$ = initReturn("Return", $2, NULL);}
+        | RETURN SEMICOLON {$$ = initReturn("Return", "", NULL);}
         ;
 
 

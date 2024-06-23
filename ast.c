@@ -158,3 +158,10 @@ Atrib *initAtrib(char *id, char *id2, Expr *expr){
     atrib->expr = expr;
     return atrib;
 }
+
+Return *initReturn(char *nodeType, char *id, Expr *expr){
+    Return *returnn = (Return*)malloc(sizeof(Return));
+    returnn->nodeType = nodeType;
+    returnn->id = id;
+    returnn->expr = expr;
+}

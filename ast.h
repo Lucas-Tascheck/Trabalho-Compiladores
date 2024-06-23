@@ -46,6 +46,12 @@ typedef struct Whilestruct {
     Bloco *blocoWhile;
 }Whilestruct;
 
+typedef struct Return {
+    char *nodeType;
+    char *id;
+    Expr *expr;
+}Return;
+
 typedef struct Escrita {
     char *nodeType;
     char *id;
@@ -148,5 +154,6 @@ ChamaFunc *initChamaFunc(char *id, ListaParamChamafunc *listaParamChamafunc);
 Escrita *initEscrita(char *nodeType, char *id, Expr *expr);
 Leitura *initLeitura(char *nodeType, char *id);
 Atrib *initAtrib(char *id, char *id2, Expr *expr);
+Return *initReturn(char *nodeType, char *id, Expr *expr);
 
 #endif
