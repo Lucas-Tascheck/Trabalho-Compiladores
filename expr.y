@@ -24,9 +24,12 @@ int yylex();
       Atrib *atrib;
       Return *returnn;
       Comando *comando;
+      Ifstruct *ifStruct;
+      Whilestruct *whilestruct;
       Expr *expr;
       Rel *rel;
 }
+
 
 %define parse.error verbose
 %token STRING
@@ -76,6 +79,8 @@ int yylex();
 %type <atrib> CmdAtrib
 %type <returnn> Retorno
 %type <comando> Comando
+%type <ifStruct> CmdSe
+%type <whilestruct> CmdEnquanto
 %%
 
 Linha : Programa {printf("%s", $1->listaDeFunc->tipo);}
@@ -171,7 +176,7 @@ Comando : CmdSe {$$ = initComando("If", $1, NULL, NULL, NULL, NULL, NULL, NULL) 
         | ChamadaProc {$$ = initComando("ChamaFunc", NULL, NULL, NULL, NULL, NULL, $1, NULL) }
         | Retorno {$$ = initComando("Return", NULL, NULL, NULL, NULL, NULL, NULL, $1) }
         ;
-        
+
 Retorno : RETURN Expr SEMICOLON {$$ = initReturn("Return", "", $2);}
         | RETURN ID SEMICOLON {$$ = initReturn("Return", $2, NULL);}
         | RETURN SEMICOLON {$$ = initReturn("Return", "", NULL);}
