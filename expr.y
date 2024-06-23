@@ -168,7 +168,7 @@ Bloco : LBRACE ListaCmd RBRACE {$$ = initBloco("Bloco", $2);}
       ;
 
 ListaCmd : ListaCmd Comando {$$ = addComando($1, $2);}
-         | Comando {$$ = $1}
+         | Comando {$$ = $1;}
          ;
 
 Comando : CmdSe {$$ = initComando("If", $1, NULL, NULL, NULL, NULL, NULL, NULL); }
