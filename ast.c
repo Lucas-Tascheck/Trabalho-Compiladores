@@ -1,6 +1,7 @@
 #include "ast.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 ListaParam *initParam(char *tipo, char *id){
     ListaParam *l = (ListaParam*)malloc(sizeof(ListaParam));
@@ -168,6 +169,7 @@ Return *initReturn(char *nodeType, char *id, Expr *expr){
 
 Comando *initComando(char *op, Ifstruct *ifstruct, Whilestruct *whilestruct, Atrib *atrib, Escrita *escrita, Leitura *leitura, ChamaFunc *chamaFunc, Return *returnn){
     Comando *comando = (Comando*)malloc(sizeof(Comando));
+    comando->op = op;
     comando->atrib = atrib;
     comando->chamaFunc = chamaFunc;
     comando->escrita = escrita;
@@ -211,8 +213,42 @@ Bloco *initBloco(char *nodeType, Comando *listaDeCmd){
     return bloco;
 }
 
-void imprimeBloco(Bloco *bloco){
+void imprimeRel(Rel *rel) {
+    if (rel != NULL) {
+        imprimeRel(rel->left);
+        if(rel->op != ""){
+            printf("%s", rel->op);
+        }
+        if(rel->value != ""){
+            printf("%s", rel->value);
+        }
+        imprimeRel(rel->right);
+    }
+}
 
+void imprimeBlocoPrincipal(BlocoPrincipal *blocoPrincipal){
+    Declaracoes *declaracoes = blocoPrincipal->listaDeDeclaracoes;
+        while(declaracoes != NULL){
+            ListaId *listaId = declaracoes->listaId;
+            printf("\t%s ", declaracoes->tipo);
+            while(listaId->prox != NULL){
+                printf("%s, ", listaId->id);
+                listaId = listaId->prox;
+            }
+            printf("%s;\n", listaId->id);
+            declaracoes = declaracoes->prox;
+        }
+    
+    Comando *listaDeCmd = blocoPrincipal->listaDeCmd;
+    while (listaDeCmd != NULL) {
+        if (strcmp(listaDeCmd->op, "If") == 0) { 
+            printf("\tIf(");
+            imprimeRel(listaDeCmd->ifstruct->rel);
+            printf("){\n");
+            printf("\t}");
+        }
+        listaDeCmd = listaDeCmd->prox;
+    }
 }
 
 void imprimeArvore(Programa *raiz){
@@ -228,17 +264,7 @@ void imprimeArvore(Programa *raiz){
         printf("%s %s){\n", listaDeParam->tipo, listaDeParam->id);
 
         BlocoPrincipal *blocoPrincipal = listaDeFunc->blocoPrincipal;
-        Declaracoes *declaracoes = blocoPrincipal->listaDeDeclaracoes;
-        while(declaracoes != NULL){
-            ListaId *listaId = declaracoes->listaId;
-            printf("\t%s ", declaracoes->tipo);
-            while(listaId->prox != NULL){
-                printf("%s, ", listaId->id);
-                listaId = listaId->prox;
-            }
-            printf("%s;\n", listaId->id);
-            declaracoes = declaracoes->prox;
-        }
+        imprimeBlocoPrincipal(blocoPrincipal);
 
         listaDeFunc = listaDeFunc->prox;
     }

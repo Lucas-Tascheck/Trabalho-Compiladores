@@ -1,8 +1,8 @@
 int fat(int n)
 {
-	int f;
+	int f, j, k;
 	f = 0;
-	while(n>0)
+	if(n>0)
 	{
 		f= f*n;
 		n = n-1;

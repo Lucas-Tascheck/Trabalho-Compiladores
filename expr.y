@@ -105,20 +105,20 @@ Fator : TNUM {$$ = initExpr("", $1, NULL, NULL, NULL);}
       | TAPAR Expr TFPAR {$$ = $2;}
       ;
 
-Rel   : Rel TAND OpLog {$$ = initRel($2, NULL, $1, $3);}
-	  | Rel TOR OpLog {$$ = initRel($2, NULL, $1, $3);}
+Rel   : Rel TAND OpLog {$$ = initRel("&&", "", $1, $3);}
+	  | Rel TOR OpLog {$$ = initRel("||", "", $1, $3);}
 	  | OpLog {$$ = $1;}
       ;
 
-OpLog : FatorLog TMORE FatorLog {$$ = initRel($2, NULL, $1, $3);}
-      | FatorLog TLESS FatorLog {$$ = initRel($2, NULL, $1, $3);} 
-      | FatorLog TEQUAL FatorLog {$$ = initRel($2, NULL, $1, $3);}
-      | FatorLog TDIFF FatorLog {$$ = initRel($2, NULL, $1, $3);}
+OpLog : FatorLog TMORE FatorLog {$$ = initRel(">", "", $1, $3);}
+      | FatorLog TLESS FatorLog {$$ = initRel("<", "", $1, $3);} 
+      | FatorLog TEQUAL FatorLog {$$ = initRel("==", "", $1, $3);}
+      | FatorLog TDIFF FatorLog {$$ = initRel("!=", "", $1, $3);}
       | FatorLog {$$ = $1;}
       ;
 
-FatorLog: TNUM {$$ = initRel(NULL, $1, NULL, NULL);}
-        | ID {$$ = initRel(NULL, $1, NULL, NULL);}
+FatorLog: TNUM {$$ = initRel("", $1, NULL, NULL);}
+        | ID {$$ = initRel("", $1, NULL, NULL);}
 
 Programa : ListaFuncoes BlocoPrincipal {$$ = initPrograma($1, $2);}
          | BlocoPrincipal {$$ = initPrograma(NULL, $1);}
@@ -143,8 +143,8 @@ DeclParametros : DeclParametros COMMA Parametro {$$ = createParam($1, $3);}
 Parametro : Tipo ID {$$ = initParam($1, $2);}
           ;
 
-BlocoPrincipal : LBRACE Declaracoes ListaCmd RBRACE {$$ = initBlocoPrincipal($2, NULL);}
-               | LBRACE ListaCmd RBRACE {$$ = initBlocoPrincipal(NULL, NULL);}
+BlocoPrincipal : LBRACE Declaracoes ListaCmd RBRACE {$$ = initBlocoPrincipal($2, $3);}
+               | LBRACE ListaCmd RBRACE {$$ = initBlocoPrincipal(NULL, $2);}
                ;
 
 Declaracoes : Declaracoes Declaracao {$$ = addDeclaracoes($1, $2);}
