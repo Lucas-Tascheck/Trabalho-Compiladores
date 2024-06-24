@@ -118,11 +118,7 @@ ListaParamChamafunc *initListaParamChamafunc(char *id, Expr *expr){
 ListaParamChamafunc *addListaParamChamafunc(ListaParamChamafunc *left, char *id, Expr *expr){
     ListaParamChamafunc *p = left;
     ListaParamChamafunc *IdRight;
-    if(id == ""){
-        IdRight = initListaParamChamafunc(NULL, expr);
-    }else{
-        IdRight = initListaParamChamafunc(id, NULL);
-    }
+    IdRight = initListaParamChamafunc(NULL, expr);
     while(p->prox != NULL){
         p = p->prox;
     }
@@ -153,9 +149,7 @@ Leitura *initLeitura(char *nodeType, char *id){
 Atrib *initAtrib(char *id, char *id2, Expr *expr){
     Atrib *atrib = (Atrib*)malloc(sizeof(Atrib));
     atrib->id = id;
-    if(id2 != ""){
-        atrib->id2 = id2;
-    }
+    atrib->id2 = id2;
     atrib->expr = expr;
     return atrib;
 }
@@ -213,6 +207,32 @@ Bloco *initBloco(char *nodeType, Comando *listaDeCmd){
     return bloco;
 }
 
+void imprimeExpr(Expr *expr){
+    if (expr != NULL) {
+        imprimeExpr(expr->left);
+        if(expr->op != ""){
+            printf("%s", expr->op);
+        }
+        if(expr->value != ""){
+            printf("%s", expr->value);
+        }
+        if(expr->chamafunc != NULL){
+            printf("%s(", expr->chamafunc->id);
+            ListaParamChamafunc *l = expr->chamafunc->listaParamChamafunc;
+            while(l->prox != NULL){
+                imprimeExpr(l->expr);
+                printf(", ");
+                l = l->prox;
+            }
+            if(l->expr != NULL){
+                imprimeExpr(l->expr);
+            }
+            printf(")");
+        }
+        imprimeExpr(expr->right);
+    }  
+}
+
 void imprimeRel(Rel *rel) {
     if (rel != NULL) {
         imprimeRel(rel->left);
@@ -224,6 +244,43 @@ void imprimeRel(Rel *rel) {
         }
         imprimeRel(rel->right);
     }
+}
+
+void imprimeListaCmd(Comando *listaDeCmd){
+    if(listaDeCmd == NULL){
+        return;
+    }
+    if (strcmp(listaDeCmd->op, "If") == 0) { 
+        printf("\tIf(");
+        imprimeRel(listaDeCmd->ifstruct->rel);
+        printf("){\n");
+        imprimeListaCmd(listaDeCmd->ifstruct->blocoIf->listaDeCmd);
+        printf("\t}\n");
+        if(listaDeCmd->ifstruct->blocoElse != NULL){
+            printf("else{\n");
+            imprimeListaCmd(listaDeCmd->ifstruct->blocoElse->listaDeCmd);
+            printf("\t}\n");
+        }
+    }
+    if (strcmp(listaDeCmd->op, "While") == 0) { 
+        printf("\tWhile(");
+        imprimeRel(listaDeCmd->whilestruct->rel);
+        printf("){\n");
+        imprimeListaCmd(listaDeCmd->whilestruct->blocoWhile->listaDeCmd);
+        printf("\t}\n");
+    }
+    if (strcmp(listaDeCmd->op, "Atrib") == 0) { 
+        printf("\t%s = ", listaDeCmd->atrib->id);
+        if (strcmp(listaDeCmd->atrib->id2, "") != 0){
+            printf("%s;\n", listaDeCmd->atrib->id2);
+        }
+        if (listaDeCmd->atrib->expr != NULL){
+            imprimeExpr(listaDeCmd->atrib->expr);
+            printf(";\n");
+        }
+    }
+
+    imprimeListaCmd(listaDeCmd->prox);
 }
 
 void imprimeBlocoPrincipal(BlocoPrincipal *blocoPrincipal){
@@ -239,16 +296,7 @@ void imprimeBlocoPrincipal(BlocoPrincipal *blocoPrincipal){
             declaracoes = declaracoes->prox;
         }
     
-    Comando *listaDeCmd = blocoPrincipal->listaDeCmd;
-    while (listaDeCmd != NULL) {
-        if (strcmp(listaDeCmd->op, "If") == 0) { 
-            printf("\tIf(");
-            imprimeRel(listaDeCmd->ifstruct->rel);
-            printf("){\n");
-            printf("\t}");
-        }
-        listaDeCmd = listaDeCmd->prox;
-    }
+    
 }
 
 void imprimeArvore(Programa *raiz){
@@ -265,6 +313,7 @@ void imprimeArvore(Programa *raiz){
 
         BlocoPrincipal *blocoPrincipal = listaDeFunc->blocoPrincipal;
         imprimeBlocoPrincipal(blocoPrincipal);
+        imprimeListaCmd(blocoPrincipal->listaDeCmd);
 
         listaDeFunc = listaDeFunc->prox;
     }

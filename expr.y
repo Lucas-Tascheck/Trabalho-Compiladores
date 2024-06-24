@@ -88,14 +88,14 @@ int yylex();
 Linha : Programa {imprimeArvore($1);}
       ; 
 
-Expr  : Expr TADD Termo {$$ = initExpr($2, "", NULL, $1, $3);}
-      | Expr TSUB Termo {$$ = initExpr($2, "", NULL, $1, $3);}
+Expr  : Expr TADD Termo {$$ = initExpr("+", "", NULL, $1, $3);}
+      | Expr TSUB Termo {$$ = initExpr("-", "", NULL, $1, $3);}
       | Termo {$$ = $1;}
       ;
 
 
-Termo : Termo TMUL Fator {$$ = initExpr($2, "", NULL, $1, $3);}
-      | Termo TDIV Fator {$$ = initExpr($2, "", NULL, $1, $3);}
+Termo : Termo TMUL Fator {$$ = initExpr("*", "", NULL, $1, $3);}
+      | Termo TDIV Fator {$$ = initExpr("/", "", NULL, $1, $3);}
       | Fator {$$ = $1;}
       | ChamaFuncao {$$ = initExpr("", "", $1, NULL, NULL);}
       ;
