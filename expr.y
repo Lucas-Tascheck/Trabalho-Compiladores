@@ -181,7 +181,6 @@ Comando : CmdSe {$$ = initComando("If", $1, NULL, NULL, NULL, NULL, NULL, NULL);
         ;
 
 Retorno : RETURN Expr SEMICOLON {$$ = initReturn("Return", "", $2);}
-        | RETURN ID SEMICOLON {$$ = initReturn("Return", $2, NULL);}
         | RETURN SEMICOLON {$$ = initReturn("Return", "", NULL);}
         ;
 
@@ -199,7 +198,6 @@ CmdAtrib : ID EQ Expr SEMICOLON {$$ = initAtrib($1, "", $3);}
 
 
 CmdEscrita : PRINT TAPAR Expr TFPAR SEMICOLON {$$ = initEscrita("Escrita", "", $3);}
-           | PRINT TAPAR ID TFPAR SEMICOLON {$$ = initEscrita("Escrita", $3, NULL);}
            ;
 
 CmdLeitura : READ TAPAR ID TFPAR SEMICOLON {$$ = initLeitura("Leitura", $3);}

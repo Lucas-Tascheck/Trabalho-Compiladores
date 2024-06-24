@@ -279,24 +279,51 @@ void imprimeListaCmd(Comando *listaDeCmd){
             printf(";\n");
         }
     }
+    if(strcmp(listaDeCmd->op, "Escrita") == 0){
+        printf("\tprint(");
+        imprimeExpr(listaDeCmd->escrita->expr);
+        printf(");\n");
+    }
+    if(strcmp(listaDeCmd->op, "Leitura") == 0){
+        printf("\tread(%s);\n", listaDeCmd->leitura->id);
+    }
+    if(strcmp(listaDeCmd->op, "ChamaFunc") == 0){
+        printf("\t%s(", listaDeCmd->chamaFunc->id);
+        ListaParamChamafunc *l = listaDeCmd->chamaFunc->listaParamChamafunc;
+        while(l->prox != NULL){
+            imprimeExpr(l->expr);
+            printf(", ");
+            l = l->prox;
+        }
+        if(l->expr != NULL){
+            imprimeExpr(l->expr);
+        }
+        printf(")\n");
+    }
+    if(strcmp(listaDeCmd->op, "Return") == 0){
+        printf("\treturn(");
+        imprimeExpr(listaDeCmd->returnn->expr);
+        printf(");\n");
+    }
 
     imprimeListaCmd(listaDeCmd->prox);
 }
 
 void imprimeBlocoPrincipal(BlocoPrincipal *blocoPrincipal){
     Declaracoes *declaracoes = blocoPrincipal->listaDeDeclaracoes;
-        while(declaracoes != NULL){
-            ListaId *listaId = declaracoes->listaId;
-            printf("\t%s ", declaracoes->tipo);
-            while(listaId->prox != NULL){
-                printf("%s, ", listaId->id);
-                listaId = listaId->prox;
-            }
-            printf("%s;\n", listaId->id);
-            declaracoes = declaracoes->prox;
+    printf("{\n");
+    while(declaracoes != NULL){
+        ListaId *listaId = declaracoes->listaId;
+        printf("\t%s ", declaracoes->tipo);
+        while(listaId->prox != NULL){
+            printf("%s, ", listaId->id);
+            listaId = listaId->prox;
         }
-    
-    
+        printf("%s;\n", listaId->id);
+        declaracoes = declaracoes->prox;
+    }
+    imprimeListaCmd(blocoPrincipal->listaDeCmd);
+    printf("}\n");
 }
 
 void imprimeArvore(Programa *raiz){
@@ -305,16 +332,20 @@ void imprimeArvore(Programa *raiz){
     while(listaDeFunc != NULL){
         printf("%s %s(", listaDeFunc->tipo, listaDeFunc->id);
         listaDeParam = listaDeFunc->listaParam;
-        while(listaDeParam->prox != NULL){
-            printf("%s %s, ", listaDeParam->tipo, listaDeParam->id);
-            listaDeParam = listaDeParam->prox;
+        if(listaDeParam == NULL){
+            printf(")");
         }
-        printf("%s %s){\n", listaDeParam->tipo, listaDeParam->id);
-
+        else{
+            while(listaDeParam->prox != NULL){
+                printf("%s %s, ", listaDeParam->tipo, listaDeParam->id);
+                listaDeParam = listaDeParam->prox;
+            }
+            printf("%s %s)\n", listaDeParam->tipo, listaDeParam->id);
+        }
         BlocoPrincipal *blocoPrincipal = listaDeFunc->blocoPrincipal;
         imprimeBlocoPrincipal(blocoPrincipal);
-        imprimeListaCmd(blocoPrincipal->listaDeCmd);
-
         listaDeFunc = listaDeFunc->prox;
     }
+    BlocoPrincipal *main = raiz->blocoPrincipal;
+    imprimeBlocoPrincipal(main);
 }
