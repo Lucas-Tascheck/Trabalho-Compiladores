@@ -1,28 +1,17 @@
-int fat(int n)
 {
-	int f, j, k;
-	f = 0;
-	
-	if(n>0)
-	{
-		f= f;
-		n = n-1;
-	}
-	while(s<0)
-	{
-		f= f*n;
-		n = n-1;
-	}
-	return f;
-}
-float teste(){
-	a = f(5, 2, a+3, 1*2-1);
-	print(aaa);
-	read(teste);
-	funcao(a+1);
-}
-{
-	int a,b;
-	a = f(5);
-	b = f(4)+1;
+	int a, b, c, d, e, f, g;
+	a = 15;
+	b = 20;
+	c = 2;
+	d = 4;
+	e = 10;
+	f = 12;
+	g = 1;
+	print(a);
+	print(b);
+	print(c);
+	print(d);
+	print(e);
+	print(f);
+	print(g);
 }

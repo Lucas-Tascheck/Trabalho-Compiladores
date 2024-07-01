@@ -122,6 +122,7 @@ struct ListaDeFunc {
 struct ListaId {
     char *nodetype;
     char *id;
+    int index;
     ListaId *prox;
 };
 

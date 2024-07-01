@@ -2,6 +2,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdarg.h>
+
+int contador = 0;
 
 ListaParam *initParam(char *tipo, char *id){
     ListaParam *l = (ListaParam*)malloc(sizeof(ListaParam));
@@ -75,6 +78,7 @@ ListaId *initListaId(char *id){
     ListaId *listaId = (ListaId*)malloc(sizeof(ListaId));
     listaId->nodetype = "ListaId";
     listaId->id = id;
+    listaId->index = contador++;
     listaId->prox = NULL;
 }
 
@@ -207,145 +211,183 @@ Bloco *initBloco(char *nodeType, Comando *listaDeCmd){
     return bloco;
 }
 
-void imprimeExpr(Expr *expr){
+FILE *outputFile;
+
+void abrirArquivoJ(char *nomeArquivo) {
+    outputFile = fopen(nomeArquivo, "w");
+    if (outputFile == NULL) {
+        perror("Erro ao abrir o arquivo .j");
+        exit(1);
+    }
+}
+
+void fecharArquivoJ() {
+    fclose(outputFile);
+}
+
+void escreverNoArquivo(char *formato, ...) {
+    va_list args;
+    va_start(args, formato);
+    vfprintf(outputFile, formato, args);
+    va_end(args);
+}
+
+void imprimeExpr(Expr *expr) {
     if (expr != NULL) {
         imprimeExpr(expr->left);
-        if(expr->op != ""){
-            printf("%s", expr->op);
+        if (expr->op != "") {
+            escreverNoArquivo("%s", expr->op);
         }
-        if(expr->value != ""){
-            printf("%s", expr->value);
+        if (expr->value != "") {
+            escreverNoArquivo("%s", expr->value);
         }
-        if(expr->chamafunc != NULL){
-            printf("%s(", expr->chamafunc->id);
+        if (expr->chamafunc != NULL) {
+            escreverNoArquivo("%s(", expr->chamafunc->id);
             ListaParamChamafunc *l = expr->chamafunc->listaParamChamafunc;
-            while(l->prox != NULL){
+            while (l->prox != NULL) {
                 imprimeExpr(l->expr);
-                printf(", ");
+                escreverNoArquivo(", ");
                 l = l->prox;
             }
-            if(l->expr != NULL){
+            if (l->expr != NULL) {
                 imprimeExpr(l->expr);
             }
-            printf(")");
+            escreverNoArquivo(")");
         }
         imprimeExpr(expr->right);
-    }  
+    }
 }
 
 void imprimeRel(Rel *rel) {
     if (rel != NULL) {
         imprimeRel(rel->left);
-        if(rel->op != ""){
-            printf("%s", rel->op);
+        if (rel->op != "") {
+            escreverNoArquivo("%s", rel->op);
         }
-        if(rel->value != ""){
-            printf("%s", rel->value);
+        if (rel->value != "") {
+            escreverNoArquivo("%s", rel->value);
         }
         imprimeRel(rel->right);
     }
 }
 
-void imprimeListaCmd(Comando *listaDeCmd){
-    if(listaDeCmd == NULL){
+int encontraIndex(ListaId *l, char *var){
+    ListaId *p = l;
+    while(p != NULL){
+        if (strcmp(p->id, var) == 0){
+            return p->index;
+        }
+        p = p->prox;
+    }
+    return -1;
+}
+
+void imprimeListaCmd(Comando *listaDeCmd, ListaId *lisId) {
+    if (listaDeCmd == NULL) {
         return;
     }
-    if (strcmp(listaDeCmd->op, "If") == 0) { 
-        printf("\tIf(");
+    if (strcmp(listaDeCmd->op, "If") == 0) {
+        escreverNoArquivo("\tIf(");
         imprimeRel(listaDeCmd->ifstruct->rel);
-        printf("){\n");
-        imprimeListaCmd(listaDeCmd->ifstruct->blocoIf->listaDeCmd);
-        printf("\t}\n");
-        if(listaDeCmd->ifstruct->blocoElse != NULL){
-            printf("else{\n");
-            imprimeListaCmd(listaDeCmd->ifstruct->blocoElse->listaDeCmd);
-            printf("\t}\n");
+        escreverNoArquivo("){\n");
+        imprimeListaCmd(listaDeCmd->ifstruct->blocoIf->listaDeCmd, lisId);
+        escreverNoArquivo("\t}\n");
+        if (listaDeCmd->ifstruct->blocoElse != NULL) {
+            escreverNoArquivo("else{\n");
+            imprimeListaCmd(listaDeCmd->ifstruct->blocoElse->listaDeCmd, lisId);
+            escreverNoArquivo("\t}\n");
         }
     }
-    if (strcmp(listaDeCmd->op, "While") == 0) { 
-        printf("\tWhile(");
+    if (strcmp(listaDeCmd->op, "While") == 0) {
+        escreverNoArquivo("\tWhile(");
         imprimeRel(listaDeCmd->whilestruct->rel);
-        printf("){\n");
-        imprimeListaCmd(listaDeCmd->whilestruct->blocoWhile->listaDeCmd);
-        printf("\t}\n");
+        escreverNoArquivo("){\n");
+        imprimeListaCmd(listaDeCmd->whilestruct->blocoWhile->listaDeCmd, lisId);
+        escreverNoArquivo("\t}\n");
     }
-    if (strcmp(listaDeCmd->op, "Atrib") == 0) { 
-        printf("\t%s = ", listaDeCmd->atrib->id);
-        if (strcmp(listaDeCmd->atrib->id2, "") != 0){
-            printf("%s;\n", listaDeCmd->atrib->id2);
+    if (strcmp(listaDeCmd->op, "Atrib") == 0) {
+        //escreverNoArquivo("\t%s = ", listaDeCmd->atrib->id);
+        if (strcmp(listaDeCmd->atrib->id2, "") != 0) {
+            escreverNoArquivo("%s;\n", listaDeCmd->atrib->id2);
         }
-        if (listaDeCmd->atrib->expr != NULL){
+        if (listaDeCmd->atrib->expr != NULL) {
+            escreverNoArquivo("\tldc ");
             imprimeExpr(listaDeCmd->atrib->expr);
-            printf(";\n");
+            escreverNoArquivo("\n\tistore %d\n\n", encontraIndex(lisId, listaDeCmd->atrib->id));
         }
     }
-    if(strcmp(listaDeCmd->op, "Escrita") == 0){
-        printf("\tprint(");
-        imprimeExpr(listaDeCmd->escrita->expr);
-        printf(");\n");
+    if (strcmp(listaDeCmd->op, "Escrita") == 0) {
+        escreverNoArquivo("\tgetstatic java/lang/System/out Ljava/io/PrintStream;\n");
+        escreverNoArquivo("\tiload %d\n", encontraIndex(lisId, listaDeCmd->escrita->expr->value));
+        escreverNoArquivo("\tinvokevirtual java/io/PrintStream/println(I)V\n\n");
     }
-    if(strcmp(listaDeCmd->op, "Leitura") == 0){
-        printf("\tread(%s);\n", listaDeCmd->leitura->id);
+    if (strcmp(listaDeCmd->op, "Leitura") == 0) {
+        escreverNoArquivo("\tread(%s);\n", listaDeCmd->leitura->id);
     }
-    if(strcmp(listaDeCmd->op, "ChamaFunc") == 0){
-        printf("\t%s(", listaDeCmd->chamaFunc->id);
+    if (strcmp(listaDeCmd->op, "ChamaFunc") == 0) {
+        escreverNoArquivo("\t%s(", listaDeCmd->chamaFunc->id);
         ListaParamChamafunc *l = listaDeCmd->chamaFunc->listaParamChamafunc;
-        while(l->prox != NULL){
+        while (l->prox != NULL) {
             imprimeExpr(l->expr);
-            printf(", ");
+            escreverNoArquivo(", ");
             l = l->prox;
         }
-        if(l->expr != NULL){
+        if (l->expr != NULL) {
             imprimeExpr(l->expr);
         }
-        printf(")\n");
+        escreverNoArquivo(")\n");
     }
-    if(strcmp(listaDeCmd->op, "Return") == 0){
-        printf("\treturn(");
+    if (strcmp(listaDeCmd->op, "Return") == 0) {
+        escreverNoArquivo("\treturn(");
         imprimeExpr(listaDeCmd->returnn->expr);
-        printf(");\n");
+        escreverNoArquivo(");\n");
     }
 
-    imprimeListaCmd(listaDeCmd->prox);
+    imprimeListaCmd(listaDeCmd->prox, lisId);
 }
 
-void imprimeBlocoPrincipal(BlocoPrincipal *blocoPrincipal){
+void imprimeBlocoPrincipal(BlocoPrincipal *blocoPrincipal) {
     Declaracoes *declaracoes = blocoPrincipal->listaDeDeclaracoes;
-    printf("{\n");
-    while(declaracoes != NULL){
-        ListaId *listaId = declaracoes->listaId;
-        printf("\t%s ", declaracoes->tipo);
-        while(listaId->prox != NULL){
-            printf("%s, ", listaId->id);
+    ListaId *listaId = declaracoes->listaId;
+    ListaId *listaId2 = declaracoes->listaId;
+    while (declaracoes != NULL) {
+        //escreverNoArquivo("\t%s ", declaracoes->tipo);
+        while (listaId->prox != NULL) {
+            //escreverNoArquivo("%s, ", listaId->id);
             listaId = listaId->prox;
         }
-        printf("%s;\n", listaId->id);
+        //escreverNoArquivo("%s;\n", listaId->id);
         declaracoes = declaracoes->prox;
     }
-    imprimeListaCmd(blocoPrincipal->listaDeCmd);
-    printf("}\n");
+    imprimeListaCmd(blocoPrincipal->listaDeCmd, listaId2);
+    escreverNoArquivo("\treturn\n");
 }
 
-void imprimeArvore(Programa *raiz){
+void imprimeArvore(Programa *raiz) {
+    abrirArquivoJ("output.j");
+    escreverNoArquivo(".class public Main\n.super java/lang/Object\n\n.method public <init>()V\n\taload_0\n\tinvokespecial java/lang/Object/<init>()V\n\treturn\n.end method\n\n");
+
     ListaDeFunc *listaDeFunc = raiz->listaDeFunc;
     ListaParam *listaDeParam;
-    while(listaDeFunc != NULL){
-        printf("%s %s(", listaDeFunc->tipo, listaDeFunc->id);
+    while (listaDeFunc != NULL) {
+        escreverNoArquivo("%s %s(", listaDeFunc->tipo, listaDeFunc->id);
         listaDeParam = listaDeFunc->listaParam;
-        if(listaDeParam == NULL){
-            printf(")");
-        }
-        else{
-            while(listaDeParam->prox != NULL){
-                printf("%s %s, ", listaDeParam->tipo, listaDeParam->id);
+        if (listaDeParam == NULL) {
+            escreverNoArquivo(")");
+        } else {
+            while (listaDeParam->prox != NULL) {
+                escreverNoArquivo("%s %s, ", listaDeParam->tipo, listaDeParam->id);
                 listaDeParam = listaDeParam->prox;
             }
-            printf("%s %s)\n", listaDeParam->tipo, listaDeParam->id);
+            escreverNoArquivo("%s %s)\n", listaDeParam->tipo, listaDeParam->id);
         }
         BlocoPrincipal *blocoPrincipal = listaDeFunc->blocoPrincipal;
         imprimeBlocoPrincipal(blocoPrincipal);
         listaDeFunc = listaDeFunc->prox;
     }
     BlocoPrincipal *main = raiz->blocoPrincipal;
+    escreverNoArquivo(".method public static main([Ljava/lang/String;)V\n\t.limit stack 3\n\t.limit locals 8\n\n");
     imprimeBlocoPrincipal(main);
+    escreverNoArquivo(".end method");
+    fecharArquivoJ();
 }
