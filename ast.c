@@ -6,7 +6,7 @@
 
 int contador = 0;
 
-ListaParam *initParam(char *tipo, char *id){
+ListaParam *initParam(char *tipo, char *id) {
     ListaParam *l = (ListaParam*)malloc(sizeof(ListaParam));
     l->tipo = tipo;
     l->id = id;
@@ -14,16 +14,16 @@ ListaParam *initParam(char *tipo, char *id){
     return l;
 }
 
-ListaParam *createParam(ListaParam *left, ListaParam *right){
+ListaParam *createParam(ListaParam *left, ListaParam *right) {
     ListaParam *p = left;
-    while(p->prox != NULL){
+    while(p->prox != NULL) {
         p = p->prox;
     }
     p->prox = right;
     return left;
 }
 
-ListaDeFunc *initListaDeFunc(char *nodetype, char *tipo, char *id, ListaParam *lista, BlocoPrincipal *blocoPrincipal){
+ListaDeFunc *initListaDeFunc(char *nodetype, char *tipo, char *id, ListaParam *lista, BlocoPrincipal *blocoPrincipal) {
     ListaDeFunc *l = (ListaDeFunc*)malloc(sizeof(ListaDeFunc));
     l->nodeType = nodetype;
     l->tipo = tipo;
@@ -34,16 +34,16 @@ ListaDeFunc *initListaDeFunc(char *nodetype, char *tipo, char *id, ListaParam *l
     return l;
 }
 
-ListaDeFunc *createFunc(ListaDeFunc *left, ListaDeFunc *right){
+ListaDeFunc *createFunc(ListaDeFunc *left, ListaDeFunc *right) {
     ListaDeFunc *p = left;
-    while(p->prox != NULL){
+    while(p->prox != NULL) {
         p = p->prox;
     }
     p->prox = right;
     return left;
 }
 
-Declaracoes *initDeclaracoes(char *tipo, ListaId *listaId){
+Declaracoes *initDeclaracoes(char *tipo, ListaId *listaId) {
     Declaracoes *declaracao = (Declaracoes*)malloc(sizeof(Declaracoes));
     declaracao->tipo = tipo;
     declaracao->listaId = listaId;
@@ -51,48 +51,49 @@ Declaracoes *initDeclaracoes(char *tipo, ListaId *listaId){
     return declaracao;
 }
 
-Declaracoes *addDeclaracoes(Declaracoes *left, Declaracoes *right){
+Declaracoes *addDeclaracoes(Declaracoes *left, Declaracoes *right) {
     Declaracoes *p = left;
-    while(p->prox != NULL){
+    while(p->prox != NULL) {
         p = p->prox;
     }
     p->prox = right;
     return left;
 }
 
-BlocoPrincipal *initBlocoPrincipal(Declaracoes *declaracoes, Comando *listaDeCmd){
+BlocoPrincipal *initBlocoPrincipal(Declaracoes *declaracoes, Comando *listaDeCmd) {
     BlocoPrincipal *blocoPrincipal = (BlocoPrincipal*)malloc(sizeof(BlocoPrincipal));
     blocoPrincipal->listaDeDeclaracoes = declaracoes;
     blocoPrincipal->listaDeCmd = listaDeCmd;
     return blocoPrincipal;
 }
 
-Programa *initPrograma(ListaDeFunc *listaDeFunc, BlocoPrincipal *blocoPrincipal){
+Programa *initPrograma(ListaDeFunc *listaDeFunc, BlocoPrincipal *blocoPrincipal) {
     Programa *programa = (Programa*)malloc(sizeof(Programa));
     programa->listaDeFunc = listaDeFunc;
     programa->blocoPrincipal = blocoPrincipal;
     return programa;
 }
 
-ListaId *initListaId(char *id){
+ListaId *initListaId(char *id) {
     ListaId *listaId = (ListaId*)malloc(sizeof(ListaId));
     listaId->nodetype = "ListaId";
     listaId->id = id;
     listaId->index = contador++;
     listaId->prox = NULL;
+    return listaId;
 }
 
-ListaId *addListaId(ListaId *left, char *right){
+ListaId *addListaId(ListaId *left, char *right) {
     ListaId *p = left;
     ListaId *IdRight = initListaId(right);
-    while(p->prox != NULL){
+    while(p->prox != NULL) {
         p = p->prox;
     }
     p->prox = IdRight;
     return left;
 }
 
-Rel *initRel(char *op, char *value, Rel *left, Rel *right){
+Rel *initRel(char *op, char *value, Rel *left, Rel *right) {
     Rel *rel = (Rel*)malloc(sizeof(Rel));
     rel->op = op;
     rel->value = value;
@@ -101,7 +102,7 @@ Rel *initRel(char *op, char *value, Rel *left, Rel *right){
     return rel;
 }
 
-Expr *initExpr(char *op, char *value, ChamaFunc *chamaFunc, Expr *left, Expr *right){
+Expr *initExpr(char *op, char *value, ChamaFunc *chamaFunc, Expr *left, Expr *right) {
     Expr *expr = (Expr*)malloc(sizeof(Expr));
     expr->op = op;
     expr->value = value;
@@ -111,7 +112,7 @@ Expr *initExpr(char *op, char *value, ChamaFunc *chamaFunc, Expr *left, Expr *ri
     return expr;
 }
 
-ListaParamChamafunc *initListaParamChamafunc(char *id, Expr *expr){
+ListaParamChamafunc *initListaParamChamafunc(char *id, Expr *expr) {
     ListaParamChamafunc *listaParamChamafunc = (ListaParamChamafunc*)malloc(sizeof(ListaParamChamafunc));
     listaParamChamafunc->id = id;
     listaParamChamafunc->expr = expr;
@@ -119,38 +120,40 @@ ListaParamChamafunc *initListaParamChamafunc(char *id, Expr *expr){
     return listaParamChamafunc;
 }
 
-ListaParamChamafunc *addListaParamChamafunc(ListaParamChamafunc *left, char *id, Expr *expr){
+ListaParamChamafunc *addListaParamChamafunc(ListaParamChamafunc *left, char *id, Expr *expr) {
     ListaParamChamafunc *p = left;
     ListaParamChamafunc *IdRight;
     IdRight = initListaParamChamafunc(NULL, expr);
-    while(p->prox != NULL){
+    while(p->prox != NULL) {
         p = p->prox;
     }
     p->prox = IdRight;
     return left;
 }
 
-ChamaFunc *initChamaFunc(char *id, ListaParamChamafunc *listaParamChamafunc){
+ChamaFunc *initChamaFunc(char *id, ListaParamChamafunc *listaParamChamafunc) {
     ChamaFunc *chamaFunc = (ChamaFunc*)malloc(sizeof(ChamaFunc));
     chamaFunc->id = id;
     chamaFunc->listaParamChamafunc = listaParamChamafunc;
     return chamaFunc;
 }
 
-Escrita *initEscrita(char *nodeType, char *id, Expr *expr){
+Escrita *initEscrita(char *nodeType, char *id, Expr *expr) {
     Escrita *escrita = (Escrita*)malloc(sizeof(Escrita));
     escrita->nodeType = nodeType;
     escrita->id = id;
     escrita->expr = expr;
+    return escrita;
 }
 
-Leitura *initLeitura(char *nodeType, char *id){
+Leitura *initLeitura(char *nodeType, char *id) {
     Leitura *leitura = (Leitura*)malloc(sizeof(Leitura));
     leitura->nodeType = nodeType;
     leitura->id = id;
+    return leitura;
 }
 
-Atrib *initAtrib(char *id, char *id2, Expr *expr){
+Atrib *initAtrib(char *id, char *id2, Expr *expr) {
     Atrib *atrib = (Atrib*)malloc(sizeof(Atrib));
     atrib->id = id;
     atrib->id2 = id2;
@@ -158,14 +161,15 @@ Atrib *initAtrib(char *id, char *id2, Expr *expr){
     return atrib;
 }
 
-Return *initReturn(char *nodeType, char *id, Expr *expr){
+Return *initReturn(char *nodeType, char *id, Expr *expr) {
     Return *returnn = (Return*)malloc(sizeof(Return));
     returnn->nodeType = nodeType;
     returnn->id = id;
     returnn->expr = expr;
+    return returnn;
 }
 
-Comando *initComando(char *op, Ifstruct *ifstruct, Whilestruct *whilestruct, Atrib *atrib, Escrita *escrita, Leitura *leitura, ChamaFunc *chamaFunc, Return *returnn){
+Comando *initComando(char *op, Ifstruct *ifstruct, Whilestruct *whilestruct, Atrib *atrib, Escrita *escrita, Leitura *leitura, ChamaFunc *chamaFunc, Return *returnn) {
     Comando *comando = (Comando*)malloc(sizeof(Comando));
     comando->op = op;
     comando->atrib = atrib;
@@ -179,16 +183,16 @@ Comando *initComando(char *op, Ifstruct *ifstruct, Whilestruct *whilestruct, Atr
     return comando;
 }
 
-Comando *addComando(Comando *left, Comando *right){
+Comando *addComando(Comando *left, Comando *right) {
     Comando *c = left;
-    while(c->prox != NULL){
+    while(c->prox != NULL) {
         c = c->prox;
     }
     c->prox = right;
     return left;
 }
 
-Ifstruct *initIf(char *nodeType, Rel *rel, Bloco *blocoIf, Bloco *blocoElse){
+Ifstruct *initIf(char *nodeType, Rel *rel, Bloco *blocoIf, Bloco *blocoElse) {
     Ifstruct *ifstruct = (Ifstruct*)malloc(sizeof(Ifstruct));
     ifstruct->nodeType = nodeType;
     ifstruct->rel = rel;
@@ -197,14 +201,15 @@ Ifstruct *initIf(char *nodeType, Rel *rel, Bloco *blocoIf, Bloco *blocoElse){
     return ifstruct;
 }
 
-Whilestruct *initWhile(char *nodeType, Rel *rel, Bloco *blocoWhile){
+Whilestruct *initWhile(char *nodeType, Rel *rel, Bloco *blocoWhile) {
     Whilestruct *whileStruct = (Whilestruct*)malloc(sizeof(Whilestruct));
     whileStruct->nodeType = nodeType;
     whileStruct->rel = rel;
     whileStruct->blocoWhile = blocoWhile;
+    return whileStruct;
 }
 
-Bloco *initBloco(char *nodeType, Comando *listaDeCmd){
+Bloco *initBloco(char *nodeType, Comando *listaDeCmd) {
     Bloco *bloco = (Bloco*)malloc(sizeof(Bloco));
     bloco->nodeType = nodeType;
     bloco->listaDeCmd = listaDeCmd;
@@ -232,30 +237,32 @@ void escreverNoArquivo(char *formato, ...) {
     va_end(args);
 }
 
-void imprimeExpr(Expr *expr) {
-    if (expr != NULL) {
-        imprimeExpr(expr->left);
-        if (expr->op != "") {
-            escreverNoArquivo("%s", expr->op);
-        }
-        if (expr->value != "") {
-            escreverNoArquivo("%s", expr->value);
-        }
-        if (expr->chamafunc != NULL) {
-            escreverNoArquivo("%s(", expr->chamafunc->id);
-            ListaParamChamafunc *l = expr->chamafunc->listaParamChamafunc;
-            while (l->prox != NULL) {
-                imprimeExpr(l->expr);
-                escreverNoArquivo(", ");
-                l = l->prox;
-            }
-            if (l->expr != NULL) {
-                imprimeExpr(l->expr);
-            }
-            escreverNoArquivo(")");
-        }
-        imprimeExpr(expr->right);
+int evaluateExpr(Expr *expr) {
+    if (expr == NULL) return 0;
+
+    if (expr->op == NULL || strcmp(expr->op, "") == 0) {
+        return atoi(expr->value);
     }
+
+    int leftValue = evaluateExpr(expr->left);
+    int rightValue = evaluateExpr(expr->right);
+
+    if (strcmp(expr->op, "+") == 0) {
+        return leftValue + rightValue;
+    } else if (strcmp(expr->op, "-") == 0) {
+        return leftValue - rightValue;
+    } else if (strcmp(expr->op, "") == 0) {
+        return leftValue * rightValue;
+    } else if (strcmp(expr->op, "/") == 0) {
+        return leftValue / rightValue;
+    } else {
+        return 0;
+    }
+}
+
+void imprimeExpr(Expr *expr) {
+    int result = evaluateExpr(expr);
+    escreverNoArquivo("%d", result);
 }
 
 void imprimeRel(Rel *rel) {
@@ -271,10 +278,10 @@ void imprimeRel(Rel *rel) {
     }
 }
 
-int encontraIndex(ListaId *l, char *var){
+int encontraIndex(ListaId *l, char *var) {
     ListaId *p = l;
-    while(p != NULL){
-        if (strcmp(p->id, var) == 0){
+    while(p != NULL) {
+        if (strcmp(p->id, var) == 0) {
             return p->index;
         }
         p = p->prox;
@@ -306,7 +313,6 @@ void imprimeListaCmd(Comando *listaDeCmd, ListaId *lisId) {
         escreverNoArquivo("\t}\n");
     }
     if (strcmp(listaDeCmd->op, "Atrib") == 0) {
-        //escreverNoArquivo("\t%s = ", listaDeCmd->atrib->id);
         if (strcmp(listaDeCmd->atrib->id2, "") != 0) {
             escreverNoArquivo("%s;\n", listaDeCmd->atrib->id2);
         }
@@ -351,12 +357,9 @@ void imprimeBlocoPrincipal(BlocoPrincipal *blocoPrincipal) {
     ListaId *listaId = declaracoes->listaId;
     ListaId *listaId2 = declaracoes->listaId;
     while (declaracoes != NULL) {
-        //escreverNoArquivo("\t%s ", declaracoes->tipo);
         while (listaId->prox != NULL) {
-            //escreverNoArquivo("%s, ", listaId->id);
             listaId = listaId->prox;
         }
-        //escreverNoArquivo("%s;\n", listaId->id);
         declaracoes = declaracoes->prox;
     }
     imprimeListaCmd(blocoPrincipal->listaDeCmd, listaId2);

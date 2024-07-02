@@ -1,17 +1,10 @@
 {
-	int a, b, c, d, e, f, g;
-	a = 15;
-	b = 20;
+	int a, b, c;
+	a = 1;
+	b = 5;
 	c = 2;
-	d = 4;
-	e = 10;
-	f = 12;
-	g = 1;
+
 	print(a);
 	print(b);
 	print(c);
-	print(d);
-	print(e);
-	print(f);
-	print(g);
 }
