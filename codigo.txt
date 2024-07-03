@@ -1,20 +1,13 @@
 {
-	int a, b, c, d, e;
+	int a, b, c;
 	a = 1;
 	b = 2;
 	c = 3;
-	d = 4;
-	e = 5;
 
-	if(1){
+	while(a <= c){
 		print(a);
-	}else{
-		print(b);
 	}
-	print(e);
-	if(0){
-		print(c);
-	}else{
-		print(d);
+	while(b >= a){
+		print(b);
 	}
 }

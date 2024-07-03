@@ -317,6 +317,7 @@ int encontraIndex(ListaId *l, char *var) {
 }
 
 int contadorDeIf = 0;
+int contadorDeWhile = 0;
 
 void imprimeListaCmd(Comando *listaDeCmd, ListaId *lisId) {
     if (listaDeCmd == NULL) {
@@ -353,11 +354,54 @@ void imprimeListaCmd(Comando *listaDeCmd, ListaId *lisId) {
     }
 
     if (strcmp(listaDeCmd->op, "While") == 0) {
-        escreverNoArquivo("\tWhile(");
-        imprimeRel(listaDeCmd->whilestruct->rel);
-        escreverNoArquivo("){\n");
+        char labelWhile[50] = "LabelWhile";
+        char labelEndWhile[50] = "LabelEndWhile";
+        char contWhile[10];
+        sprintf(contWhile, "%d", contadorDeWhile);
+        strcat(labelWhile, contWhile);
+        strcat(labelEndWhile, contWhile);
+        escreverNoArquivo("%s:\n", labelWhile);
+        int var1 = encontraIndex(lisId, listaDeCmd->whilestruct->rel->left->value);
+        int var2 = encontraIndex(lisId, listaDeCmd->whilestruct->rel->right->value);
+        if(var1 == -1){
+            var1 = atoi(listaDeCmd->whilestruct->rel->left->value);
+            escreverNoArquivo("\tbipush %d\n", var1);
+        } else{
+            escreverNoArquivo("\tiload %d\n", var1);
+        }
+        if(var2 == -1){
+            var2 = atoi(listaDeCmd->whilestruct->rel->right->value);
+            escreverNoArquivo("\tbipush %d\n", var2);
+        } else{
+            escreverNoArquivo("\tiload %d\n", var2);
+        }
+        if(strcmp(listaDeCmd->whilestruct->rel->op, ">") == 0){
+            escreverNoArquivo("\tif_icmple %s\n", labelEndWhile);
+        }
+        if(strcmp(listaDeCmd->whilestruct->rel->op, ">=") == 0){
+            escreverNoArquivo("\tif_icmplt %s\n", labelEndWhile);
+        }
+        if(strcmp(listaDeCmd->whilestruct->rel->op, "<") == 0){
+            escreverNoArquivo("\tif_icmpge %s\n", labelEndWhile);
+        }
+        if(strcmp(listaDeCmd->whilestruct->rel->op, "<=") == 0){
+            escreverNoArquivo("\tif_icmpgt %s\n", labelEndWhile);
+        }
         imprimeListaCmd(listaDeCmd->whilestruct->blocoWhile->listaDeCmd, lisId);
-        escreverNoArquivo("\t}\n");
+        if(strcmp(listaDeCmd->whilestruct->rel->op, ">") == 0 || strcmp(listaDeCmd->whilestruct->rel->op, ">=") == 0){
+            escreverNoArquivo("\tiload %d\n", var1);
+            escreverNoArquivo("\ticonst_1\n");
+            escreverNoArquivo("\tisub\n");
+            escreverNoArquivo("\tistore %d\n", var1);
+        }else{
+            escreverNoArquivo("\tiload %d\n", var1);
+            escreverNoArquivo("\ticonst_1\n");
+            escreverNoArquivo("\tiadd\n");
+            escreverNoArquivo("\tistore %d\n", var1);
+        }
+        escreverNoArquivo("\tgoto %s\n", labelWhile);
+        escreverNoArquivo("%s:\n\n", labelEndWhile);
+        contadorDeWhile++;
     }
     if (strcmp(listaDeCmd->op, "Atrib") == 0) {
         if (strcmp(listaDeCmd->atrib->id2, "") != 0) {

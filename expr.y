@@ -36,8 +36,10 @@ int yylex();
 %token INT FLOAT VOID
 %token IF ELSE WHILE PRINT READ RETURN
 %token SEMICOLON COMMA LBRACE RBRACE
-%token TADD TMUL TSUB TDIV EQ TAPAR TFPAR TNUM TLESS TMORE TEQUAL TDIFF TAND TOR NOT TFIM ID 
+%token TADD TMUL TSUB TDIV EQ TAPAR TFPAR TNUM TLESS TMORE TEQUAL TDIFF TAND TOR NOT TMOREEQ TLESSEQ TFIM ID 
 %type <str> NOT
+%type <str> TLESSEQ
+%type <str> TMOREEQ
 %type <str> TADD
 %type <str> TMUL
 %type <str> TSUB
@@ -114,6 +116,8 @@ Rel   : Rel TAND OpLog {$$ = initRel("&&", "", $1, $3);}
 OpLog : FatorLog TMORE FatorLog {$$ = initRel(">", "", $1, $3);}
       | FatorLog TLESS FatorLog {$$ = initRel("<", "", $1, $3);} 
       | FatorLog TEQUAL FatorLog {$$ = initRel("==", "", $1, $3);}
+      | FatorLog TLESSEQ FatorLog {$$ = initRel("<=", "", $1, $3);}
+      | FatorLog TMOREEQ FatorLog {$$ = initRel(">=", "", $1, $3);}
       | FatorLog TDIFF FatorLog {$$ = initRel("!=", "", $1, $3);}
       | FatorLog {$$ = $1;}
       ;

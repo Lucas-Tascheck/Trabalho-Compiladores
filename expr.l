@@ -29,6 +29,8 @@ id	[a-zA-Z][a-zA-Z0-9]*
 "("     {return TAPAR;}
 ")"     {return TFPAR;}
 "<"     {return TLESS;}
+"<="    {return TLESSEQ;}
+">="    {return TMOREEQ;}
 ">"     {return TMORE;}
 "=="    {return TEQUAL;}
 "!="    {return TDIFF;}
