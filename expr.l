@@ -34,6 +34,7 @@ id	[a-zA-Z][a-zA-Z0-9]*
 "!="    {return TDIFF;}
 "&&"    {return TAND;}
 "||"    {return TOR;}
+"!"     {return NOT;}
 "int"   {return INT;}
 "float" {return FLOAT;}
 "string" {return STRING;}

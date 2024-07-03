@@ -265,16 +265,43 @@ void imprimeExpr(Expr *expr) {
     escreverNoArquivo("%d", result);
 }
 
+int avaliaRel(Rel *rel) {
+    if (rel == NULL) {
+        return 0;
+    }
+
+    if (rel->op == NULL || strcmp(rel->op, "") == 0) {
+        return atoi(rel->value);
+    }
+
+    int left = avaliaRel(rel->left);
+    int right = avaliaRel(rel->right);
+
+    if (strcmp(rel->op, "&&") == 0) {
+        return left && right;
+    } else if (strcmp(rel->op, "||") == 0) {
+        return left || right;
+    } else if (strcmp(rel->op, "==") == 0) {
+        return left == right;
+    } else if (strcmp(rel->op, "!=") == 0) {
+        return left != right;
+    } else if (strcmp(rel->op, "<") == 0) {
+        return left < right;
+    } else if (strcmp(rel->op, "<=") == 0) {
+        return left <= right;
+    } else if (strcmp(rel->op, ">") == 0) {
+        return left > right;
+    } else if (strcmp(rel->op, ">=") == 0) {
+        return left >= right;
+    }
+
+    return 0;
+}
+
 void imprimeRel(Rel *rel) {
     if (rel != NULL) {
-        imprimeRel(rel->left);
-        if (rel->op != "") {
-            escreverNoArquivo("%s", rel->op);
-        }
-        if (rel->value != "") {
-            escreverNoArquivo("%s", rel->value);
-        }
-        imprimeRel(rel->right);
+        int resultado = avaliaRel(rel);
+        escreverNoArquivo("%d", resultado);
     }
 }
 
@@ -289,22 +316,42 @@ int encontraIndex(ListaId *l, char *var) {
     return -1;
 }
 
+int contadorDeIf = 0;
+
 void imprimeListaCmd(Comando *listaDeCmd, ListaId *lisId) {
     if (listaDeCmd == NULL) {
         return;
     }
     if (strcmp(listaDeCmd->op, "If") == 0) {
-        escreverNoArquivo("\tIf(");
-        imprimeRel(listaDeCmd->ifstruct->rel);
-        escreverNoArquivo("){\n");
-        imprimeListaCmd(listaDeCmd->ifstruct->blocoIf->listaDeCmd, lisId);
-        escreverNoArquivo("\t}\n");
-        if (listaDeCmd->ifstruct->blocoElse != NULL) {
-            escreverNoArquivo("else{\n");
-            imprimeListaCmd(listaDeCmd->ifstruct->blocoElse->listaDeCmd, lisId);
-            escreverNoArquivo("\t}\n");
+        char labelIf[50] = "LabelEndIf";
+        char labelElse[50] = "LabelElse";
+        char labelEndElse[50] = "LabelEndElse";
+        char contIf[10];
+        sprintf(contIf, "%d", contadorDeIf);
+        strcat(labelIf, contIf);
+        strcat(labelElse, contIf);
+        strcat(labelEndElse, contIf);
+        if (!avaliaRel(listaDeCmd->ifstruct->rel)) {
+            escreverNoArquivo("\ticonst_0\n");
+        } else {
+            escreverNoArquivo("\ticonst_1\n");
         }
+        if (listaDeCmd->ifstruct->blocoElse != NULL) {
+            escreverNoArquivo("\tifeq %s\n", labelElse);
+            imprimeListaCmd(listaDeCmd->ifstruct->blocoIf->listaDeCmd, lisId);
+            escreverNoArquivo("\tgoto %s\n", labelEndElse);
+            escreverNoArquivo("%s:\n", labelElse);
+            imprimeListaCmd(listaDeCmd->ifstruct->blocoElse->listaDeCmd, lisId);
+            escreverNoArquivo("%s:\n", labelEndElse);
+        }
+        if (listaDeCmd->ifstruct->blocoElse == NULL) {
+            escreverNoArquivo("\tifeq %s\n", labelIf);
+            imprimeListaCmd(listaDeCmd->ifstruct->blocoIf->listaDeCmd, lisId);
+            escreverNoArquivo("%s:\n", labelIf);
+        }
+        contadorDeIf++;
     }
+
     if (strcmp(listaDeCmd->op, "While") == 0) {
         escreverNoArquivo("\tWhile(");
         imprimeRel(listaDeCmd->whilestruct->rel);

@@ -36,8 +36,8 @@ int yylex();
 %token INT FLOAT VOID
 %token IF ELSE WHILE PRINT READ RETURN
 %token SEMICOLON COMMA LBRACE RBRACE
-%token TADD TMUL TSUB TDIV EQ TAPAR TFPAR TNUM TLESS TMORE TEQUAL TDIFF TAND TOR TFIM ID
-
+%token TADD TMUL TSUB TDIV EQ TAPAR TFPAR TNUM TLESS TMORE TEQUAL TDIFF TAND TOR NOT TFIM ID 
+%type <str> NOT
 %type <str> TADD
 %type <str> TMUL
 %type <str> TSUB
@@ -51,6 +51,7 @@ int yylex();
 %type <str> TDIFF
 %type <str> TAND
 %type <str> TOR
+
 %type <programa> Programa
 %type <listaDeFunc> Linha
 %type <listaDeFunc> ListaFuncoes
