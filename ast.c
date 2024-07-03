@@ -305,21 +305,38 @@ void imprimeRel(Rel *rel) {
     }
 }
 
-int encontraIndex(ListaId *l, char *var) {
-    ListaId *p = l;
-    while(p != NULL) {
-        if (strcmp(p->id, var) == 0) {
-            return p->index;
+int encontraIndex(Declaracoes *l, char *var) {
+    Declaracoes *decl = l;
+    while(decl!=NULL){
+        ListaId *p = decl->listaId;
+        while(p != NULL) {
+            if (strcmp(p->id, var) == 0) {
+                return p->index;
+            }
+            p = p->prox;
+        }
+        decl = decl->prox;
+    }
+    printf("Variavel %s nao declarada\n", var);
+    return -1;
+}
+
+ListaDeFunc *encontraFunc(ListaDeFunc *l, char *id){
+    ListaDeFunc *p = l;
+    while(p != NULL){
+        if (strcmp(p->id, id) == 0) {
+            return p;
         }
         p = p->prox;
     }
-    return -1;
+    p = NULL;
+    return p;
 }
 
 int contadorDeIf = 0;
 int contadorDeWhile = 0;
 
-void imprimeListaCmd(Comando *listaDeCmd, ListaId *lisId) {
+void imprimeListaCmd(Comando *listaDeCmd, Declaracoes *listaDeDeclaracoes, Programa *raiz) {
     if (listaDeCmd == NULL) {
         return;
     }
@@ -339,15 +356,15 @@ void imprimeListaCmd(Comando *listaDeCmd, ListaId *lisId) {
         }
         if (listaDeCmd->ifstruct->blocoElse != NULL) {
             escreverNoArquivo("\tifeq %s\n", labelElse);
-            imprimeListaCmd(listaDeCmd->ifstruct->blocoIf->listaDeCmd, lisId);
+            imprimeListaCmd(listaDeCmd->ifstruct->blocoIf->listaDeCmd, raiz->blocoPrincipal->listaDeDeclaracoes, raiz);
             escreverNoArquivo("\tgoto %s\n", labelEndElse);
             escreverNoArquivo("%s:\n", labelElse);
-            imprimeListaCmd(listaDeCmd->ifstruct->blocoElse->listaDeCmd, lisId);
+            imprimeListaCmd(listaDeCmd->ifstruct->blocoElse->listaDeCmd, raiz->blocoPrincipal->listaDeDeclaracoes, raiz);
             escreverNoArquivo("%s:\n", labelEndElse);
         }
         if (listaDeCmd->ifstruct->blocoElse == NULL) {
             escreverNoArquivo("\tifeq %s\n", labelIf);
-            imprimeListaCmd(listaDeCmd->ifstruct->blocoIf->listaDeCmd, lisId);
+            imprimeListaCmd(listaDeCmd->ifstruct->blocoIf->listaDeCmd, raiz->blocoPrincipal->listaDeDeclaracoes, raiz);
             escreverNoArquivo("%s:\n", labelIf);
         }
         contadorDeIf++;
@@ -361,8 +378,8 @@ void imprimeListaCmd(Comando *listaDeCmd, ListaId *lisId) {
         strcat(labelWhile, contWhile);
         strcat(labelEndWhile, contWhile);
         escreverNoArquivo("%s:\n", labelWhile);
-        int var1 = encontraIndex(lisId, listaDeCmd->whilestruct->rel->left->value);
-        int var2 = encontraIndex(lisId, listaDeCmd->whilestruct->rel->right->value);
+        int var1 = encontraIndex(raiz->blocoPrincipal->listaDeDeclaracoes, listaDeCmd->whilestruct->rel->left->value);
+        int var2 = encontraIndex(raiz->blocoPrincipal->listaDeDeclaracoes, listaDeCmd->whilestruct->rel->right->value);
         if(var1 == -1){
             var1 = atoi(listaDeCmd->whilestruct->rel->left->value);
             escreverNoArquivo("\tbipush %d\n", var1);
@@ -387,7 +404,7 @@ void imprimeListaCmd(Comando *listaDeCmd, ListaId *lisId) {
         if(strcmp(listaDeCmd->whilestruct->rel->op, "<=") == 0){
             escreverNoArquivo("\tif_icmpgt %s\n", labelEndWhile);
         }
-        imprimeListaCmd(listaDeCmd->whilestruct->blocoWhile->listaDeCmd, lisId);
+        imprimeListaCmd(listaDeCmd->whilestruct->blocoWhile->listaDeCmd, raiz->blocoPrincipal->listaDeDeclaracoes, raiz);
         if(strcmp(listaDeCmd->whilestruct->rel->op, ">") == 0 || strcmp(listaDeCmd->whilestruct->rel->op, ">=") == 0){
             escreverNoArquivo("\tiload %d\n", var1);
             escreverNoArquivo("\ticonst_1\n");
@@ -410,40 +427,48 @@ void imprimeListaCmd(Comando *listaDeCmd, ListaId *lisId) {
         if (listaDeCmd->atrib->expr != NULL) {
             escreverNoArquivo("\tldc ");
             imprimeExpr(listaDeCmd->atrib->expr);
-            escreverNoArquivo("\n\tistore %d\n\n", encontraIndex(lisId, listaDeCmd->atrib->id));
+            escreverNoArquivo("\n\tistore %d\n\n", encontraIndex(raiz->blocoPrincipal->listaDeDeclaracoes, listaDeCmd->atrib->id));
         }
     }
     if (strcmp(listaDeCmd->op, "Escrita") == 0) {
         escreverNoArquivo("\tgetstatic java/lang/System/out Ljava/io/PrintStream;\n");
-        escreverNoArquivo("\tiload %d\n", encontraIndex(lisId, listaDeCmd->escrita->expr->value));
+        escreverNoArquivo("\tiload %d\n", encontraIndex(raiz->blocoPrincipal->listaDeDeclaracoes, listaDeCmd->escrita->expr->value));
         escreverNoArquivo("\tinvokevirtual java/io/PrintStream/println(I)V\n\n");
     }
     if (strcmp(listaDeCmd->op, "Leitura") == 0) {
         escreverNoArquivo("\tread(%s);\n", listaDeCmd->leitura->id);
     }
     if (strcmp(listaDeCmd->op, "ChamaFunc") == 0) {
-        escreverNoArquivo("\t%s(", listaDeCmd->chamaFunc->id);
         ListaParamChamafunc *l = listaDeCmd->chamaFunc->listaParamChamafunc;
-        while (l->prox != NULL) {
-            imprimeExpr(l->expr);
-            escreverNoArquivo(", ");
+        while (l != NULL) {
+            escreverNoArquivo("\tiload %d\n", encontraIndex(raiz->blocoPrincipal->listaDeDeclaracoes, l->expr->value));
             l = l->prox;
         }
-        if (l->expr != NULL) {
-            imprimeExpr(l->expr);
+        l = listaDeCmd->chamaFunc->listaParamChamafunc;
+        escreverNoArquivo("\tinvokestatic Main/%s(", listaDeCmd->chamaFunc->id);
+        while (l != NULL) {
+            escreverNoArquivo("I");
+            l = l->prox;
         }
-        escreverNoArquivo(")\n");
+        ListaDeFunc *f = encontraFunc(raiz->listaDeFunc, listaDeCmd->chamaFunc->id);
+        if(strcmp(f->tipo, "int") == 0){
+            escreverNoArquivo(")I\n");
+        }
+        if(strcmp(f->tipo, "void") == 0){
+            escreverNoArquivo(")V\n");
+        }
     }
     if (strcmp(listaDeCmd->op, "Return") == 0) {
-        escreverNoArquivo("\treturn(");
+        escreverNoArquivo("\tldc ");
         imprimeExpr(listaDeCmd->returnn->expr);
-        escreverNoArquivo(");\n");
+        escreverNoArquivo("\n\tireturn\n");
     }
 
-    imprimeListaCmd(listaDeCmd->prox, lisId);
+    imprimeListaCmd(listaDeCmd->prox, raiz->blocoPrincipal->listaDeDeclaracoes, raiz);
 }
 
-void imprimeBlocoPrincipal(BlocoPrincipal *blocoPrincipal) {
+void imprimeBlocoPrincipal(BlocoPrincipal *blocoPrincipal, Programa *raiz) {
+    escreverNoArquivo("\t.limit stack 3\n\t.limit locals 8\n\n");
     Declaracoes *declaracoes = blocoPrincipal->listaDeDeclaracoes;
     ListaId *listaId = declaracoes->listaId;
     ListaId *listaId2 = declaracoes->listaId;
@@ -453,8 +478,7 @@ void imprimeBlocoPrincipal(BlocoPrincipal *blocoPrincipal) {
         }
         declaracoes = declaracoes->prox;
     }
-    imprimeListaCmd(blocoPrincipal->listaDeCmd, listaId2);
-    escreverNoArquivo("\treturn\n");
+    imprimeListaCmd(blocoPrincipal->listaDeCmd, raiz->blocoPrincipal->listaDeDeclaracoes, raiz);
 }
 
 void imprimeArvore(Programa *raiz) {
@@ -464,24 +488,35 @@ void imprimeArvore(Programa *raiz) {
     ListaDeFunc *listaDeFunc = raiz->listaDeFunc;
     ListaParam *listaDeParam;
     while (listaDeFunc != NULL) {
-        escreverNoArquivo("%s %s(", listaDeFunc->tipo, listaDeFunc->id);
+        //escreverNoArquivo("%s %s(", listaDeFunc->tipo, listaDeFunc->id);
+        escreverNoArquivo(".method public static %s(", listaDeFunc->id);
         listaDeParam = listaDeFunc->listaParam;
         if (listaDeParam == NULL) {
             escreverNoArquivo(")");
-        } else {
-            while (listaDeParam->prox != NULL) {
-                escreverNoArquivo("%s %s, ", listaDeParam->tipo, listaDeParam->id);
+        } 
+        else {
+            while (listaDeParam != NULL) {
+                if(strcmp(listaDeParam->tipo, "int") == 0){
+                    escreverNoArquivo("I");
+                }
                 listaDeParam = listaDeParam->prox;
             }
-            escreverNoArquivo("%s %s)\n", listaDeParam->tipo, listaDeParam->id);
+            if(strcmp(listaDeFunc->tipo, "int") == 0){
+                escreverNoArquivo(")I\n");
+            }
+            if(strcmp(listaDeFunc->tipo, "void") == 0){
+                escreverNoArquivo(")V\n");
+            }
         }
         BlocoPrincipal *blocoPrincipal = listaDeFunc->blocoPrincipal;
-        imprimeBlocoPrincipal(blocoPrincipal);
+        imprimeBlocoPrincipal(blocoPrincipal, raiz);
         listaDeFunc = listaDeFunc->prox;
+        escreverNoArquivo(".end method\n\n");
     }
     BlocoPrincipal *main = raiz->blocoPrincipal;
-    escreverNoArquivo(".method public static main([Ljava/lang/String;)V\n\t.limit stack 3\n\t.limit locals 8\n\n");
-    imprimeBlocoPrincipal(main);
+    escreverNoArquivo(".method public static main([Ljava/lang/String;)V\n");
+    imprimeBlocoPrincipal(main, raiz);
+    escreverNoArquivo("\treturn\n");
     escreverNoArquivo(".end method");
     fecharArquivoJ();
 }
